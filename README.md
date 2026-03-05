@@ -2,7 +2,17 @@
 
 ## Case Topic
 
-> TODO
+You are a team of data scientists in the
+Ministry of Education, focusing on
+higher education (universities)
+
+Given the recent shifts in the global
+economy and technological
+developments, you have been tasked
+to use a data-driven approach to
+assess how well university courses
+are preparing students today for
+real-world jobs.
 
 ## Methodology
 
@@ -10,7 +20,9 @@
 
 ## Dataset
 
-- TODO
+1. Job ads from `MyCareersFuture` between **25 Jan 2026 and 31
+   Jan 2026**
+2. NUS module information from `NUSMods` API
 
 ## Local Setup
 
