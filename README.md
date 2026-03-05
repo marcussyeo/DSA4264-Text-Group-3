@@ -24,6 +24,11 @@ real-world jobs.
    Jan 2026**
 2. NUS module information from `NUSMods` API
 
+## Prerequisites
+
+- **Job ads data:** The MyCareersFuture dataset is large. Download it from [Google Drive](https://drive.google.com/file/d/1lmGbsgpxBRtl1tZTsasUbEEYy-STIqcA/view) and place it in the `data/` folder before running any analysis.
+- **NUS modules data:** The `modules.csv` file (fetched from the NUSMods API) is already included in `data/`.
+
 ## Local Setup
 
 This project uses Python 3.12+ with a virtual environment.
