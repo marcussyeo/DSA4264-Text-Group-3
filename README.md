@@ -23,6 +23,7 @@ real-world jobs.
 1. Job ads from `MyCareersFuture` between **25 Jan 2026 and 31
    Jan 2026**
 2. NUS module information from `NUSMods` API
+3. NTU module information from `NTUMods` API
 
 ## Prerequisites
 
@@ -128,6 +129,94 @@ python scripts/get_module_info.py --year 2024-2025 --output data/modules_2024.cs
 | `prerequisite`            | Prerequisites required before taking this module             |
 | `corequisite`             | Modules that must be taken concurrently                      |
 | `semestersOffered`        | Comma-separated semesters the module is offered (e.g. `1,2`) |
+
+### `scripts/get_ntu_module_info.py`
+
+Fetches all NTU modules from the [NTUMods API](https://backend.ntumods.org/courses/) and outputs a CSV file with one row per module. Pages through the paginated API and writes each page to disk immediately, so no data is lost if the script is interrupted.
+
+**Usage:**
+
+```bash
+python scripts/get_ntu_module_info.py [--output OUTPUT]
+```
+
+**Arguments:**
+
+| Argument   | Default                          | Description                                                            |
+| ---------- | -------------------------------- | ---------------------------------------------------------------------- |
+| `--output` | `data/ntu_mods_<today>.csv`      | Path to the output CSV file (directory is created if it doesn't exist) |
+
+**Examples:**
+
+```bash
+# Fetch all NTU modules to the default date-stamped output path
+python scripts/get_ntu_module_info.py
+
+# Specify a custom output path
+python scripts/get_ntu_module_info.py --output data/ntu_mods.csv
+```
+
+**Output columns:**
+
+| Column           | Description                              |
+| ---------------- | ---------------------------------------- |
+| `code`           | Module code (e.g. `AAD08A`)              |
+| `name`           | Module name                              |
+| `academic_units` | Number of academic units (AUs)           |
+
+**Notes:**
+- If interrupted, re-running the script resumes from where it left off — already-saved module codes are skipped.
+- A 0.5 s delay is inserted between page requests to avoid rate limiting. If a `429` response is received the script automatically waits for the `Retry-After` period before retrying.
+
+---
+
+### `scripts/get_ntu_module_descriptions.py`
+
+Reads the CSV produced by `get_ntu_module_info.py`, fetches the full course description for each module from the [NTUMods website](https://www.ntumods.org), and writes a new CSV that includes a `description` column. Uses multiple parallel workers to speed up the process.
+
+**Usage:**
+
+```bash
+python scripts/get_ntu_module_descriptions.py [--input INPUT] [--output OUTPUT] [--workers N]
+```
+
+**Arguments:**
+
+| Argument    | Default                               | Description                                                             |
+| ----------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| `--input`   | `data/ntu_mods_2026-03-12.csv`        | Path to the input CSV produced by `get_ntu_module_info.py`              |
+| `--output`  | `data/ntu_mods_with_description.csv`  | Path to the output CSV file (directory is created if it doesn't exist)  |
+| `--workers` | `10`                                  | Number of parallel worker threads                                       |
+
+**Examples:**
+
+```bash
+# Fetch descriptions with default settings (10 workers)
+python scripts/get_ntu_module_descriptions.py --input data/ntu_mods_2026-03-12.csv
+
+# Use more workers for faster scraping (watch for 429s)
+python scripts/get_ntu_module_descriptions.py --input data/ntu_mods_2026-03-12.csv --workers 20
+
+# Use fewer workers if rate-limited
+python scripts/get_ntu_module_descriptions.py --input data/ntu_mods_2026-03-12.csv --workers 5
+```
+
+**Output columns:**
+
+| Column           | Description                              |
+| ---------------- | ---------------------------------------- |
+| `code`           | Module code (e.g. `AAD08A`)              |
+| `name`           | Module name                              |
+| `academic_units` | Number of academic units (AUs)           |
+| `description`    | Full course description                  |
+
+**Notes:**
+- Run `get_ntu_module_info.py` first to generate the required input file.
+- Each worker thread uses its own HTTP session. A 0.5 s delay is applied per worker between requests.
+- If interrupted, re-running skips already-fetched module codes and resumes from where it left off.
+- If a `429` response is received, the affected worker waits for the `Retry-After` period. Reduce `--workers` or increase `REQUEST_DELAY` (top of the script) if rate limiting is persistent.
+
+---
 
 ## Contributed By
 
