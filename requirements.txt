@@ -1,4 +1,11 @@
+beautifulsoup4
+hdbscan
+matplotlib
 numpy
 pandas
+pyarrow
 requests
+scikit-learn
+scipy
+sentence-transformers
 tqdm
