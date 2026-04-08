@@ -1,0 +1,286 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: #f5f7fb;
+  color: #111827;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.08), transparent 35%),
+    #f5f7fb;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+.page-shell {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding: 48px 20px 64px;
+}
+
+.hero {
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  margin: 8px 0 12px;
+}
+
+.hero-copy,
+.helper,
+.message__text,
+.result-card__reason,
+.result-card__snippet {
+  color: #4b5563;
+}
+
+.eyebrow {
+  color: #1d4ed8;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.chat-shell {
+  display: grid;
+  gap: 20px;
+}
+
+.control-panel,
+.transcript,
+.composer {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.control-panel {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 20px 24px;
+}
+
+.control-panel h2 {
+  margin: 4px 0 6px;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-pill {
+  background: #eff6ff;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #1d4ed8;
+  cursor: pointer;
+  padding: 10px 16px;
+}
+
+.mode-pill--active {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.transcript {
+  display: grid;
+  gap: 16px;
+  min-height: 420px;
+  padding: 24px;
+}
+
+.empty-state {
+  align-items: center;
+  display: grid;
+  justify-items: center;
+  min-height: 360px;
+  padding: 32px;
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin-bottom: 8px;
+}
+
+.message {
+  border-radius: 20px;
+  display: grid;
+  gap: 12px;
+  max-width: 90%;
+  padding: 18px 20px;
+}
+
+.message--user {
+  background: #1d4ed8;
+  color: #fff;
+  justify-self: end;
+}
+
+.message--user .message__text,
+.message--user .message__meta {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.message--assistant {
+  background: #f8fafc;
+  justify-self: start;
+}
+
+.message__meta {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.message__text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.result-group {
+  display: grid;
+  gap: 12px;
+}
+
+.result-group__label {
+  margin: 0;
+}
+
+.result-card {
+  background: #fff;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 18px;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.result-card__header {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.result-card__header h4,
+.result-card__header p,
+.result-card__reason,
+.result-card__snippet,
+.result-link {
+  margin: 0;
+}
+
+.score-pill,
+.tag {
+  background: #eff6ff;
+  border-radius: 999px;
+  color: #1d4ed8;
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 10px;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.result-link {
+  color: #1d4ed8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.composer {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.composer__input {
+  background: transparent;
+  border: 0;
+  min-height: 120px;
+  outline: none;
+  resize: vertical;
+}
+
+.composer__footer {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.send-button {
+  background: #111827;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px 18px;
+}
+
+.send-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.warning-list,
+.error-text {
+  color: #b45309;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .control-panel {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .toggle-row {
+    width: 100%;
+  }
+
+  .mode-pill {
+    flex: 1;
+  }
+
+  .message {
+    max-width: 100%;
+  }
+}
