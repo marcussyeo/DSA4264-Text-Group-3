@@ -79,6 +79,60 @@ This project uses Python 3.12+ with a virtual environment.
 
 7. Run your first cell in `main.ipynb`
 
+## Chat App
+
+This repository now includes a browser-based chat interface that wraps the Python retrieval workflow.
+
+### Architecture
+
+- **Python retrieval backend** in `retrieval/`
+- **Offline artifact builder** in `scripts/build_chat_index.py`
+- **HTTP retrieval API** in `scripts/run_retrieval_server.py`
+- **Next.js chat UI** in `app/`, `components/`, and `lib/`
+
+### What the chat app does
+
+- In `Find jobs` mode, enter a NUS module code like `CS1010` or a degree label like `Computer Science` to retrieve relevant job listings.
+- In `Find modules` mode, enter a job title or paste a job description to retrieve relevant NUS modules.
+
+### Setup
+
+1. Install the existing Python dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Install the web app dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Build the retrieval artifacts:
+
+   ```bash
+   .venv/bin/python scripts/build_chat_index.py
+   ```
+
+4. Start the retrieval API:
+
+   ```bash
+   .venv/bin/python scripts/run_retrieval_server.py
+   ```
+
+5. In a second terminal, start the Next.js app:
+
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000)
+
+### Environment variables
+
+Create `.env.local` from `.env.example` if you want to point the web app at a non-default retrieval server URL.
+
 ## Scripts
 
 ### `scripts/get_module_info.py`
