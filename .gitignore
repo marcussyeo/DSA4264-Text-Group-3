@@ -1,7 +1,14 @@
 .env
+.env.local
 .venv/
 venv/
 .DS_Store
+node_modules/
+.next/
+dist/
+__pycache__/
+*.pyc
+tsconfig.tsbuildinfo
 
 data/MyCareersFutureData/
 notebooks/cache/
