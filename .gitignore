@@ -10,5 +10,6 @@ __pycache__/
 *.pyc
 tsconfig.tsbuildinfo
 
-data/MyCareersFutureData/
+data/
 notebooks/cache/
+notebooks/evaluation/golden_set.csv
