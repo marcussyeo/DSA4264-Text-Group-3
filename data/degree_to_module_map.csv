@@ -1,0 +1,116 @@
+﻿degree_id,degree_name,requirement_group,moduleCode
+dsa,Data Science and Analytics,core,DSA1101
+dsa,Data Science and Analytics,core,CS2040
+dsa,Data Science and Analytics,core,DSA2101
+dsa,Data Science and Analytics,core,DSA2102
+dsa,Data Science and Analytics,core,MA2001
+dsa,Data Science and Analytics,core,MA2002
+dsa,Data Science and Analytics,core,MA2104
+dsa,Data Science and Analytics,core,ST2131
+dsa,Data Science and Analytics,core,ST2132
+dsa,Data Science and Analytics,core,CS3244
+dsa,Data Science and Analytics,core,DSA3101
+dsa,Data Science and Analytics,core,DSA3102
+dsa,Data Science and Analytics,core,ST3131
+dsa,Data Science and Analytics,core,DSE4211
+dsa,Data Science and Analytics,core,DSA4264
+dsa,Data Science and Analytics,common,HSA1000
+dsa,Data Science and Analytics,common,HSH1000
+dsa,Data Science and Analytics,common,HSS1000
+dsa,Data Science and Analytics,common,HSI1000
+dsa,Data Science and Analytics,common,GEA1000
+dsa,Data Science and Analytics,common,GEI1000
+dsa,Data Science and Analytics,common,DTK1234
+dsa,Data Science and Analytics,common,HS1501
+cs,Computer Science,core,CS1231S
+cs,Computer Science,core,CS2030S
+cs,Computer Science,core,CS2040S
+cs,Computer Science,core,CS2100
+cs,Computer Science,core,CS2101
+cs,Computer Science,core,CS2103T
+cs,Computer Science,core,CS2106
+cs,Computer Science,core,CS2109S
+cs,Computer Science,core,CS3230
+cs,Computer Science,core,MA1521
+cs,Computer Science,core,MA1522
+cs,Computer Science,core,ST2334
+cs,Computer Science,core,CS4248
+cs,Computer Science,core,CS4234
+cs,Computer Science,core,CS4239
+cs,Computer Science,common,ES2660
+cs,Computer Science,common,GEA1000
+cs,Computer Science,common,CS1101S
+cs,Computer Science,common,IS1108
+cs,Computer Science,common,GESS1000
+cs,Computer Science,common,GEX1011
+cs,Computer Science,common,GEC1017
+cs,Computer Science,common,GEN2000
+cnm,Communications and New Media,core,NM1101E
+cnm,Communications and New Media,core,NM2101
+cnm,Communications and New Media,core,NM2103
+cnm,Communications and New Media,core,NM2104
+cnm,Communications and New Media,core,NM4208
+cnm,Communications and New Media,core,NM2207
+cnm,Communications and New Media,core,NM2209
+cnm,Communications and New Media,core,NM2219
+cnm,Communications and New Media,core,NM2220
+cnm,Communications and New Media,core,NM2223
+cnm,Communications and New Media,core,NM3205
+cnm,Communications and New Media,core,NM3211
+cnm,Communications and New Media,core,NM3217
+cnm,Communications and New Media,core,NM4213
+cnm,Communications and New Media,core,NM4256
+cnm,Communications and New Media,common,HSA1000
+cnm,Communications and New Media,common,HSH1000
+cnm,Communications and New Media,common,HSS1000
+cnm,Communications and New Media,common,HSI1000
+cnm,Communications and New Media,common,GEA1000
+cnm,Communications and New Media,common,GEI1001
+cnm,Communications and New Media,common,DTK1234
+cnm,Communications and New Media,common,HS1501
+ce,Civil Engineering,core,MA1511
+ce,Civil Engineering,core,MA1513
+ce,Civil Engineering,core,CE2407A
+ce,Civil Engineering,core,CE2407B
+ce,Civil Engineering,core,EG2401A
+ce,Civil Engineering,core,EG3611A
+ce,Civil Engineering,core,CE1103
+ce,Civil Engineering,core,CE3155A
+ce,Civil Engineering,core,CE2155
+ce,Civil Engineering,core,CE2134
+ce,Civil Engineering,core,CE3115
+ce,Civil Engineering,core,CE3116
+ce,Civil Engineering,core,CE3121
+ce,Civil Engineering,core,CE3132
+ce,Civil Engineering,core,CE4002
+ce,Civil Engineering,common,CDE2501
+ce,Civil Engineering,common,ES2631
+ce,Civil Engineering,common,CS1010E
+ce,Civil Engineering,common,GEA1000
+ce,Civil Engineering,common,DTK1234
+ce,Civil Engineering,common,EG1311
+ce,Civil Engineering,common,EE2211
+ce,Civil Engineering,common,PF1101
+biz,Business Administration,core,ACC1701X
+biz,Business Administration,core,MKT1705A
+biz,Business Administration,core,MNO1706A
+biz,Business Administration,core,DAO2702
+biz,Business Administration,core,DAO2703
+biz,Business Administration,core,FIN2704
+biz,Business Administration,core,MKT4722
+biz,Business Administration,core,FIN4723
+biz,Business Administration,core,ACC3703
+biz,Business Administration,core,DBA4713
+biz,Business Administration,core,EC3332
+biz,Business Administration,core,BSN3703
+biz,Business Administration,core,MNO4717
+biz,Business Administration,core,DOS3702
+biz,Business Administration,core,RE4803
+biz,Business Administration,common,GEA1000
+biz,Business Administration,common,DAO1704
+biz,Business Administration,common,BSP1703
+biz,Business Administration,common,ES2002
+biz,Business Administration,common,RE1707
+biz,Business Administration,common,MNO2707A
+biz,Business Administration,common,BSP1702
+biz,Business Administration,common,GEC1017
