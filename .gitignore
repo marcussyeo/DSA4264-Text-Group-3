@@ -12,4 +12,4 @@ tsconfig.tsbuildinfo
 
 data/
 notebooks/cache/
-notebooks/evaluation/golden_set.csv
+notebooks/evaluation/*.csv
