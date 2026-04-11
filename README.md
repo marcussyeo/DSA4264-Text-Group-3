@@ -1,41 +1,16 @@
-# DSA4264 Text Group 3
+## Objective
 
-## Case Topic
-
-You are a team of data scientists in the
-Ministry of Education, focusing on
-higher education (universities)
-
-Given the recent shifts in the global
-economy and technological
-developments, you have been tasked
-to use a data-driven approach to
-assess how well university courses
-are preparing students today for
-real-world jobs.
-
-## Methodology
-
-1. **Define scope** — Specify which degrees, graduate/seniority levels, and job types are in scope to make "alignment" operational. Output: written task definition.
-2. **Ingest and QA data** — Parse modules and job ads, strip HTML, and track missingness, malformed rows, duplicates, and date coverage to support trustworthy coverage claims. Output: clean source tables and QA report.
-3. **Filter and deduplicate jobs** — Remove or stratify out-of-scope roles and consolidate near-identical ads to stop noisy rankings. Output: curated job corpus.
-4. **Construct auditable degree baskets** — Define core, common, and specialisation modules with explicit weights and provenance for defensible degree-level matching. Output: per-degree basket table.
-5. **Build model-ready representations** — Create compact degree summaries and normalised skill sets that fit encoder limits to avoid truncation and improve interpretability. Output: degree texts/features and job texts/features.
-6. **Score candidate matches** — Run semantic baseline, skill-only, and hybrid models, optionally with metadata features, to compare methods. Output: ranked degree-job pairs.
-7. **Build a gold benchmark** — Sample pairs across degrees, score bands, baselines, and negatives, then label with multiple annotators for unbiased validation. Output: dev/test benchmark with inter-annotator agreement statistics.
-8. **Evaluate and analyse** — Report strict and relaxed Precision@k, NDCG, hit rate, calibration/agreement, ablations, and error analysis to demonstrate validity. Output: model comparison tables and qualitative findings.
-9. **Add reporting abstractions** — Only after validation, aggregate to role families or clusters and check their quality for MOE-friendly summaries. Output: validated role-level dashboards/tables.
+This project aims to develop a credible, scalable, and validated framework for assessing how well university curricula align with labour market needs. Rather than determining whether universities are performing “well” or “poorly,” the goal is to provide MOE with a systematic way to evaluate curriculum-job alignment at scale.
 
 ## Dataset
 
-1. Job ads from `MyCareersFuture` between **25 Jan 2026 and 31
-   Jan 2026**
-2. NUS module information from `NUSMods` API
+1. Job ads from `MyCareersFuture` between **25 Jan 2026 and 31 Jan 2026** (Restricted)
+2. NUS module information from `NUSMods` API (Public)
 
 ## Prerequisites
 
 - **Job ads data:** The MyCareersFuture dataset is large. Download it from [Google Drive](https://drive.google.com/file/d/1lmGbsgpxBRtl1tZTsasUbEEYy-STIqcA/view) and place it in the `data/` folder before running any analysis.
-- **NUS modules data:** The `modules.csv` file (fetched from the NUSMods API) is already included in `data/`.
+- **NUS modules data:** Run `python scripts/get_module_info.py` to fetch module data from the NUSMods API and generate `modules.csv` in `data/`.
 
 ## Local Setup
 
@@ -116,7 +91,7 @@ If you are editing the technical report, start from:
 
 ## Chat App
 
-This repository now includes a browser-based chat interface that wraps the Python retrieval workflow.
+This repository also includes a browser-based chat interface that wraps the Python retrieval workflow.
 
 ### Architecture
 
