@@ -14,6 +14,7 @@ from .data import build_degree_profiles, build_jobs_dataframe, build_modules_dat
 MODEL_NAME = "all-MiniLM-L6-v2"
 MAX_WORDS_PER_PROFILE = 8000
 MIN_MODULES_PER_DEGREE = 3
+SKILL_SIGNAL_VERSION = "job_skill_coverage_v1"
 DEFAULT_CACHE_DIR = Path("notebooks/cache")
 DEFAULT_MODULES_CSV = Path("data/modules.csv")
 DEFAULT_JOBS_DIR = Path("data/MyCareersFutureData")
@@ -58,7 +59,7 @@ class ArtifactPaths:
 
     @property
     def skill_overlap(self) -> Path:
-        return self.cache_dir / "skill_overlap_matrix.npy"
+        return self.cache_dir / f"skill_overlap_matrix_{SKILL_SIGNAL_VERSION}.npy"
 
 
 def artifact_paths(cache_dir: Path | str = DEFAULT_CACHE_DIR, model_name: str = MODEL_NAME) -> ArtifactPaths:
@@ -219,10 +220,10 @@ def _load_or_build_skill_overlap(
         if overlap.shape == (len(degree_profiles), len(jobs)):
             return overlap.astype(np.float32)
 
-    def jaccard(left: set[str], right: set[str]) -> float:
-        if not left and not right:
+    def job_skill_coverage(degree_skills: set[str], job_skills: set[str]) -> float:
+        if not job_skills:
             return 0.0
-        return len(left & right) / len(left | right)
+        return len(degree_skills & job_skills) / len(job_skills)
 
     job_skill_sets = [
         {skill.lower().strip() for skill in skills if skill}
@@ -237,7 +238,7 @@ def _load_or_build_skill_overlap(
         if not current_skills:
             continue
         for job_pos, job_skills in enumerate(job_skill_sets):
-            overlap[degree_pos, job_pos] = jaccard(current_skills, job_skills)
+            overlap[degree_pos, job_pos] = job_skill_coverage(current_skills, job_skills)
 
     np.save(output_path, overlap)
     return overlap

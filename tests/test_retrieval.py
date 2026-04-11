@@ -82,7 +82,7 @@ class RetrievalSearchTests(unittest.TestCase):
         np.save(cache_dir / "module_embeddings_all-MiniLM-L6-v2.npy", np.array([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32))
         np.save(cache_dir / "degree_embeddings_all-MiniLM-L6-v2.npy", np.array([[1.0, 0.0]], dtype=np.float32))
         np.save(cache_dir / "job_embeddings_all-MiniLM-L6-v2.npy", np.array([[0.9, 0.1], [0.1, 0.9]], dtype=np.float32))
-        np.save(cache_dir / "skill_overlap_matrix.npy", np.array([[1.0, 0.0]], dtype=np.float32))
+        np.save(cache_dir / "skill_overlap_matrix_job_skill_coverage_v1.npy", np.array([[1.0, 0.0]], dtype=np.float32))
 
         self.service = SearchService(cache_dir=cache_dir)
 
