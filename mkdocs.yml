@@ -1,0 +1,26 @@
+site_name: DSA4264 Technical Report
+site_description: Technical report for DSA4264 Text Group 3
+site_url: https://example.github.io/DSA4264-Text-Group-3/
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Project Overview: project-overview.md
+  - Methodology: methodology.md
+  - Results: results.md
+  - Appendix: appendix.md
+
+extra_css:
+  - stylesheets/extra.css

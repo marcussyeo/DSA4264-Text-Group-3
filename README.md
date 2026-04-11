@@ -86,6 +86,34 @@ This project uses Python 3.12+ with a virtual environment.
 
 7. Run your first cell in `nus.ipynb`
 
+## Technical Report
+
+The MkDocs report source lives in [`docs/`](docs/), with the main landing page at [`docs/index.md`](docs/index.md).
+
+If you are editing the technical report, start from:
+
+- [`docs/index.md`](docs/index.md)
+- [`docs/project-overview.md`](docs/project-overview.md)
+- [`docs/methodology.md`](docs/methodology.md)
+- [`docs/results.md`](docs/results.md)
+- [`docs/appendix.md`](docs/appendix.md)
+
+### Viewing the report locally
+
+1. Install the documentation dependencies:
+
+   ```bash
+   pip install -r requirements-docs.txt
+   ```
+
+2. Serve the site with live-reload:
+
+   ```bash
+   mkdocs serve
+   ```
+
+3. Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+
 ## Chat App
 
 This repository now includes a browser-based chat interface that wraps the Python retrieval workflow.
