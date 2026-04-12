@@ -2,11 +2,15 @@
 
 ## Problem Statement
 
-Universities aim to prepare students for the workforce, but the degree of alignment between module content and real job requirements is often difficult to measure directly. This project uses text-based analysis to compare university module descriptions with job advertisements, allowing us to identify patterns of overlap between academic preparation and employer demand.
+This project was conducted to measure whether university courses are adequately preparing students for real-world jobs in a rapidly changing economic environment. As industries continue to evolve due to technological advancements, universities face increasing pressure to ensure that their syllabus keeps up with the labour market.
+
+The purpose of this project is to use a data-driven approach to measure the gap to which university courses content are aligned with employer expectations. Rather than relying on anecdotal views of whether a degree is "relevant", this project aims to have a systematic way of comparing university syllabus with actual job advertisements. This will allow a more data-based insights as compared to general perceptions and this would contribute to the broader discussion on how higher education institutions can respond to real-world market changes and better equip students with the relevant skills.
 
 ## Data Sources
 
-The analysis currently draws on two main data sources. The first is module information from the NUSMods API, which provides module titles, descriptions, and metadata. The second is a set of job advertisements from MyCareersFuture collected over a fixed period. Together, these sources allow us to compare educational content against market-facing language about skills, responsibilities, and qualifications.
+The analysis currently draws on two main data sources. The first is a dataset that comes from the NUSMods API which provides module-level information from the National University of Singapore. This would include data such as module titles and descriptions to show content taught within the module. 
+
+The second dataset is a set of job advertisements from MyCareersFuture that covers postings from 25 January 2026 to 31 January 2026. These advertisements provide information on job titles, job descriptions, skills required and together, it represents details about current labour market demand. These two datasets will provide the basis for comparing university syllabus with the skill required stated in real job postings.
 
 ## Scope
 
