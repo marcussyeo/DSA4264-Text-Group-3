@@ -14,4 +14,4 @@ The second dataset is a set of job advertisements from MyCareersFuture that cove
 
 ## Scope
 
-At this stage, the project focuses on NUS modules and selected job advertisements that are relevant to the case study. Additional universities or broader labour-market comparisons can be discussed as extensions, but they are outside the core scope of the current report.
+At this stage, the project focuses on NUS modules and current job advertisements that are relevant to the case study. Additional universities or broader labour-market comparisons can be discussed as extensions, but they are outside the core scope of the current report. The report and findings is limited by the time window of job postings used. As such, findings should be seen as a snapshot of alignment rather than a universal measure of programme relevance. This project aims to provide a baseline structure for evaluating university syllabus relevance and it can be extended or scaled up in future with broader datasets and improved methods.
