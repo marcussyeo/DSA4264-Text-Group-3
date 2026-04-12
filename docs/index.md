@@ -1,20 +1,16 @@
 # Technical Report
 
-## Evaluating University Modules Against Real-World Job Requirements
+## Auditable Curriculum-Job Alignment for Public Decision-Making
 
-This site contains the technical report for the DSA4264 Text Group 3 project. The goal of the project is to study how well university coursework aligns with the skills and expectations reflected in recent job advertisements. We focus on module descriptions from NUS and job advertisements from MyCareersFuture, and we build a retrieval-based workflow to compare academic content with labour market signals.
+This report documents a retrieval-based framework for assessing how closely university curricula align with current labour-market demand. The aim is practical rather than punitive: an agency such as MOE needs an auditable way to detect where programmes appear aligned, where gaps may be emerging, and where deeper curriculum review may be warranted. The framework is therefore designed to support judgement, not replace it.
 
-The report is written in prose and organised as a documentation site so that readers can move between the project overview, methodology, results, and appendix. As the project matures, this landing page can also be used to summarise the main research question, key findings, and links to interactive components or supplementary material.
+The project combines NUS module descriptions with MyCareersFuture job advertisements, converts both into comparable text representations, and evaluates lexical, semantic, skill-based, hybrid, and cluster-routed ranking methods on a shared internal gold set. Cluster-routed semantic retrieval performs best overall, while the hybrid semantic-plus-skill score is nearly as strong and easier to explain because it separates semantic similarity from explicit skill coverage.
 
 ## Report Structure
 
-| Section | Purpose |
+| Section | What it covers |
 | --- | --- |
-| Project Overview | Defines the problem, data sources, and project scope |
-| Methodology | Explains the pipeline, modelling choices, and evaluation setup |
-| Results | Summarises findings with tables and figures |
-| Appendix | Stores implementation details, assumptions, and supporting notes |
-
-## Current Status
-
-This is a scaffolded version of the report with short placeholder content. The structure is ready for you to expand into the full technical write-up required for submission.
+| Project Overview | Problem framing, stakeholders, data sources, and scope |
+| Methodology | Data cleaning, degree-profile construction, scoring methods, and execution design |
+| Results | Quantitative comparison, qualitative examples, and policy interpretation |
+| Appendix | Reproducibility notes, repository map, and implementation references |

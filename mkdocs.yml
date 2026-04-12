@@ -1,6 +1,5 @@
 site_name: DSA4264 Technical Report
 site_description: Technical report for DSA4264 Text Group 3
-site_url: https://example.github.io/DSA4264-Text-Group-3/
 
 theme:
   name: material

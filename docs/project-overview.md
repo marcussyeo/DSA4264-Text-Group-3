@@ -1,17 +1,30 @@
 # Project Overview
 
-## Problem Statement
+## Policy Problem
 
-This project was conducted to measure whether university courses are adequately preparing students for real-world jobs in a rapidly changing economic environment. As industries continue to evolve due to technological advancements, universities face increasing pressure to ensure that their syllabus keeps up with the labour market.
+This project addresses a public-policy question: how can a ministry or university evaluate whether curriculum content is keeping pace with labour-market demand without relying on anecdote, media narratives, or one-off employer surveys? In practice, curriculum review is slow, while job demand changes quickly. A scalable text-analytic framework can therefore act as an early warning system. It can surface where a programme appears strongly aligned with current occupations, where alignment is mixed, and where human review may be needed.
 
-The purpose of this project is to use a data-driven approach to measure the gap to which university courses content are aligned with employer expectations. Rather than relying on anecdotal views of whether a degree is "relevant", this project aims to have a systematic way of comparing university syllabus with actual job advertisements. This will allow a more data-based insights as compared to general perceptions and this would contribute to the broader discussion on how higher education institutions can respond to real-world market changes and better equip students with the relevant skills.
+The framework is designed for decision support, not automated judgement. Curriculum relevance is multi-dimensional and should not be reduced to a single score. Some programmes intentionally serve broad civic, scientific, or foundational goals that do not map neatly to short-term job ads. For that reason, our output is best interpreted as a structured signal about present labour-market alignment rather than a final statement about programme quality.
+
+## Stakeholders And Intended Use
+
+The main stakeholder is MOE, which needs evidence that is scalable, explainable, and robust enough for policy discussion. Universities are a second stakeholder because they need interpretable evidence when reviewing core modules, electives, and common curriculum requirements. Students and employers also benefit indirectly: students gain a clearer picture of which learning pathways connect to job families, while employers gain a better articulation of where university training already overlaps with industry needs.
+
+These stakeholder needs shape the design choices in this report. We prioritise transparent retrieval methods over opaque end-to-end prediction, preserve textual evidence for every match, and report limitations explicitly so that the framework supports deliberation rather than replacing it.
 
 ## Data Sources
 
-The analysis currently draws on two main data sources. The first is a dataset that comes from the NUSMods API which provides module-level information from the National University of Singapore. This would include data such as module titles and descriptions to show content taught within the module. 
+The analysis combines curriculum text with labour-market text.
 
-The second dataset is a set of job advertisements from MyCareersFuture that covers postings from 25 January 2026 to 31 January 2026. These advertisements provide information on job titles, job descriptions, skills required and together, it represents details about current labour market demand. These two datasets will provide the basis for comparing university syllabus with the skill required stated in real job postings.
+| Source | Role in framework | Scale used in report |
+| --- | --- | --- |
+| NUSMods API via `data/modules.csv` | Supplies module titles, descriptions, faculty, and department metadata | 7,014 raw modules; 4,032 undergraduate modules with sufficiently detailed descriptions after filtering |
+| MyCareersFuture JSON postings in `data/MyCareersFutureData/` | Supplies job titles, descriptions, structured skills, and category labels | 22,720 raw postings collected from 25 Jan 2026 to 31 Jan 2026 |
 
-## Scope
+For the main case study, we do not compare all departments at once. Instead, we build five curated degree proxies: Business Administration, Civil Engineering, Communications and New Media, Computer Science, and Data Science and Analytics. Each proxy consists of 23 modules, made up of 15 programme-specific modules and 8 common curriculum modules. This keeps the comparison policy-relevant while ensuring enough textual coverage to build meaningful degree profiles.
 
-At this stage, the project focuses on NUS modules and current job advertisements that are relevant to the case study. Additional universities or broader labour-market comparisons can be discussed as extensions, but they are outside the core scope of the current report. The report and findings is limited by the time window of job postings used. As such, findings should be seen as a snapshot of alignment rather than a universal measure of programme relevance. This project aims to provide a baseline structure for evaluating university syllabus relevance and it can be extended or scaled up in future with broader datasets and improved methods.
+## Scope And Boundaries
+
+The report deliberately evaluates alignment, not graduate outcomes. A job ad reflects employer demand language, not actual hiring success, wages, job quality, or long-term career mobility. Likewise, module descriptions are imperfect summaries of what is taught in class. The framework therefore measures textual alignment between advertised demand and documented curriculum content.
+
+The study also uses a one-week job snapshot. This is acceptable for a proof-of-concept because the goal is to test whether the methodology is credible and reproducible, but it means the results should be read as a market snapshot rather than a permanent truth. If policy users were to adopt the framework, the correct next step would be repeated runs over time so that sudden sectoral fluctuations do not drive curriculum conclusions.
