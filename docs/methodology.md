@@ -24,17 +24,9 @@ This cleaning stage directly addresses rubric expectations around robustness. Wi
 
 ## Degree Profile Construction
 
-Instead of treating an entire department as a degree, the notebook constructs five curated degree proxies. Each proxy contains 23 modules: 15 degree-specific modules and 8 common curriculum modules that reflect institution-wide training. The resulting profiles range from 3,067 to 3,545 words and are long enough to capture both specialised and transferable skills.
+Instead of treating an entire department as a degree, the notebook constructs 15 curated degree proxies. Most contain 23 modules built from 15 degree-specific modules and 8 common curriculum modules; Accounting contains 24 modules. The resulting profiles range from 2,794 to 3,545 words and cover business, engineering, computing, health, and humanities domains.
 
 To score degree-to-job alignment, we first compute module-level similarities and then aggregate using the mean of the top five module scores for each degree. This top-5 aggregation avoids letting a single unusually well-matched module dominate the degree score, while still rewarding degrees that contain multiple relevant modules. The choice is theoretically sensible for curriculum review because a programme should be credited when alignment is distributed across the curriculum rather than concentrated in one elective.
-
-| Degree proxy | Modules used | Profile words |
-| --- | ---: | ---: |
-| Business Administration | 23 | 3,371 |
-| Civil Engineering | 23 | 3,067 |
-| Communications and New Media | 23 | 3,545 |
-| Computer Science | 23 | 3,211 |
-| Data Science and Analytics | 23 | 3,272 |
 
 ## Alignment Methods
 
@@ -54,7 +46,7 @@ The repository’s interactive search service uses the same general logic but in
 
 ## Evaluation Strategy
 
-Evaluation is performed on the internal gold dataset stored in `notebooks/evaluation/gold_degree_job_alignment.csv`. The set contains 190 labelled degree-job pairs drawn from both high-ranking candidates and deliberately chosen low-score contrast samples. Human labels are distributed across three classes: Relevant, Somewhat Relevant, and Not Relevant. This produces a more credible test than evaluating only on obviously good matches.
+Evaluation is performed on the internal gold dataset stored in `notebooks/evaluation/gold_degree_job_alignment.csv`. The current benchmark contains 616 labelled degree-job pairs across 15 degree proxies. It combines top-ranked candidates from different methods with deliberately chosen low-score contrast samples, which makes it more credible than evaluating only on obvious positives. The label distribution is 476 Relevant, 52 Somewhat Relevant, and 88 Not Relevant.
 
 We report precision-oriented ranking metrics at `k = 1, 3, 5` and a human-model agreement score. Strict precision counts only labels marked Relevant. Relaxed precision treats both Relevant and Somewhat Relevant as acceptable matches. This distinction matters in education-policy settings because many curriculum-job links are partial rather than binary. A role may be adjacent to a degree even if it is not the most direct destination.
 

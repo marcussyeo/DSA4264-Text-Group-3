@@ -2,33 +2,36 @@
 
 ## Quantitative Comparison
 
-The main finding is that richer retrieval methods outperform simple lexical matching, but the improvement is not uniform across all degrees. On the 190-pair gold set, cluster-routed semantic retrieval achieves the highest mean human-model agreement at 0.620, narrowly ahead of the hybrid semantic-plus-skill method at 0.615 and the plain semantic baseline at 0.603. Lexical TF-IDF is clearly the weakest overall method. This shows that curriculum-job alignment cannot be reduced to keyword overlap alone; semantic representation is needed to capture paraphrase, adjacent terminology, and broader role framing.
+The latest evaluation is broader and stronger than the earlier report draft. It now covers 15 degree proxies and 616 labelled degree-job pairs. On this benchmark, cluster-routed semantic retrieval achieves the best overall human-model agreement at 0.668, followed by semantic cosine at 0.658 and the hybrid semantic-plus-skill method at 0.655. Lexical TF-IDF remains the weakest overall method, but it is still competitive in some domains, which shows that domain vocabulary continues to matter even after stronger semantic models are introduced.
 
 | Method | Mean human-model agreement | Mean Precision@5 |
 | --- | ---: | ---: |
-| Cluster-routed semantic | 0.620 | 1.00 |
-| Hybrid semantic + skill | 0.615 | 1.00 |
-| Semantic cosine | 0.603 | 0.92 |
-| Skill coverage | 0.508 | 0.92 |
-| Lexical TF-IDF | 0.419 | 0.80 |
+| Cluster-routed semantic | 0.668 | 1.00 |
+| Semantic cosine | 0.658 | 0.973 |
+| Hybrid semantic + skill | 0.655 | 1.00 |
+| Lexical TF-IDF | 0.601 | 0.947 |
+| Skill coverage | 0.531 | 0.973 |
 
-Although cluster-routed semantic is best overall, the hybrid score is still attractive for operational use because it is easier to explain. In policy settings, a marginal performance gain is not always worth a large drop in interpretability. The hybrid method keeps a clear semantic component while also exposing whether the curriculum text explicitly covers employer-stated skills.
+One important detail is that top-k precision is close to ceiling for the strongest methods. Cluster-routed semantic and hybrid both achieve perfect `Precision@5`, while semantic cosine is only slightly lower. This means ranking agreement is the more informative discriminator. In other words, the key question is not whether the methods can place some good jobs near the top; it is whether they order the candidates in a way that matches human judgement consistently across disciplines.
 
-The degree-level breakdown reinforces this point. Civil Engineering is best served by the skill-coverage view, suggesting that employer language in that domain is relatively explicit and credential-driven. Communications and New Media performs best under lexical TF-IDF, which implies that shared vocabulary matters more in that field. Computer Science benefits most from cluster-routed semantic retrieval, consistent with the idea that software roles are described in many firm-specific ways and therefore gain from role-level grouping. No single method dominates for every degree, which is why the project compares several baselines instead of presenting one score as universally correct.
+The method comparison also shows that no single approach dominates every degree. Semantic cosine is best for 7 of the 15 degree proxies, cluster-routed semantic is best for 4, lexical TF-IDF for 2, and skill coverage for 2. The hybrid method is close to the leaders but does not top any degree by agreement. This pattern is useful rather than disappointing: it suggests the framework is sensitive to real differences in labour-market language. Technical roles with many firm-specific descriptions benefit from clustering, while some programmes are still well served by simple shared vocabulary or explicit skill tags.
+
+![Updated evaluation summary](assets/evaluation_summary.png)
+
+The left panel shows that cluster-routed semantic has the best overall agreement, but the margin over semantic cosine and hybrid is small. The right panel shows why a portfolio view is preferable in policy use: different methods win in different degree families. For the interactive app, the hybrid score remains useful because it gives slightly less accuracy than the top offline method but clearer explanations through its semantic and skill components.
 
 ## Qualitative Alignment Patterns
 
-The ranked results are substantively plausible. Business Administration retrieves finance and accounting roles such as Financial Accountant and Finance Controller. Civil Engineering retrieves Design Engineer and Civil & Structural Engineer roles. Communications and New Media surfaces marketing and corporate communication roles. Computer Science retrieves software engineering roles, while Data Science and Analytics retrieves data analyst, data engineer, and data scientist roles. These patterns suggest the framework is not merely matching generic language; it is recovering job families that are recognisably connected to the curriculum proxies.
+The ranked results remain substantively plausible across very different disciplines. Accounting retrieves audit and accountant roles, Business Administration retrieves finance-controller and finance-analyst roles, Data Science and Analytics surfaces data scientist and data engineer roles, and Pharmacy retrieves pharmacy technician and pharmacist roles. This matters because the method is being asked to handle both highly vocational programmes and broader interdisciplinary ones within the same pipeline.
 
-At the same time, score magnitudes remain moderate rather than artificially extreme. The best hybrid scores fall roughly between 0.33 and 0.40 across the five degrees. This is a useful result in itself. It suggests that even strong matches represent partial alignment, which is realistic because a degree profile is broader than any single job ad and a job ad usually reflects employer-specific tooling, seniority requirements, and organisational context.
+There are also useful edge cases. Architecture produces a sensible architecture-specific match, but also surfaces adjacent built-environment and project-engineering roles. History shows lower and more diffuse matches than professionally regulated programmes. These cases support a more careful policy reading: high alignment is easier to establish for programmes with clear occupational pipelines, while broad-based degrees produce noisier but still interpretable labour-market signals.
 
-![Best job match scores by degree](assets/degree_alignment_scores.png)
-
-The figure above shows that the best-scoring degree-job matches cluster around a mean hybrid score of 0.380. Communications and New Media and Business Administration achieve the strongest best-match scores, while Computer Science is slightly lower. This should not be read as a claim that Computer Science is less valuable. A more careful interpretation is that software jobs often contain narrower tool stacks and employer-specific requirements, which can reduce direct textual overlap even when the programme is clearly relevant.
-
-![Similarity distributions](assets/similarity_distributions.png)
-
-The cosine-similarity distributions provide a second diagnostic. The job-to-degree distribution is centred well below 0.5, which indicates that most jobs are not close matches to any one degree proxy. For policy purposes, this is desirable. If every job looked highly aligned to every degree, the framework would have little discriminatory value. Instead, the distribution suggests a usable middle ground: enough spread to distinguish stronger from weaker matches, but not so much concentration that the system simply memorises obvious keywords.
+| Degree proxy | Representative top match | Why it is useful |
+| --- | --- | --- |
+| Accounting | Audit Assistant | Strong direct occupational pipeline |
+| Architecture | Senior Architect / Assistant Project Engineer | Captures both core and adjacent built-environment roles |
+| Data Science and Analytics | Data Scientist | Reflects explicit analytics and modelling demand |
+| Pharmacy | Pharmacy Technician / Pharmacist | Shows strong alignment in a tightly regulated domain |
 
 ## Interpretation For Policy Use
 
@@ -36,6 +39,6 @@ Two conclusions follow. First, curriculum-job alignment should be reported as a 
 
 ## Limitations, Biases, And Ethical Considerations
 
-Several limitations matter for responsible use. The job corpus covers only one week of postings, so short-term hiring spikes may influence apparent alignment. The degree proxies are curated rather than exhaustive, which improves control but may omit specialised electives. The gold set is an internal human-labelled proxy set rather than an external benchmark, so performance numbers should be interpreted as validation evidence, not a final claim of generalisability. There is also unavoidable platform bias: MyCareersFuture reflects the jobs posted there, not the entire labour market.
+Several limitations matter for responsible use. The job corpus still covers only one week of postings, so short-term hiring spikes may influence apparent alignment. The degree proxies are curated rather than exhaustive, which improves control but may omit specialised electives. The gold set is internal and label-imbalanced toward Relevant pairs, which helps explain the very high precision scores; the benchmark is therefore useful, but not yet definitive. There is also unavoidable platform bias: MyCareersFuture reflects the jobs posted there, not the entire labour market.
 
-There are ethical implications as well. A system like this could be misused to penalise programmes that serve broader social or intellectual goals. To avoid that, the report frames alignment as one input into curriculum review rather than a replacement for expert judgement. The scope filters also embody a policy choice: excluding internships, academia, and very senior leadership roles keeps the comparison focused, but different policy questions may require different inclusion rules. Future work should therefore add time-series monitoring, broader university coverage, and a larger independently annotated evaluation set.
+There are ethical implications as well. A system like this could be misused to penalise programmes that serve broader social or intellectual goals. To avoid that, the report frames alignment as one input into curriculum review rather than a replacement for expert judgement. The scope filters also embody a policy choice: excluding internships, academia, and very senior leadership roles keeps the comparison focused, but different policy questions may require different inclusion rules. Future work should add time-series monitoring, broader university coverage, and a larger independently annotated benchmark.

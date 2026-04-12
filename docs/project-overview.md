@@ -21,7 +21,7 @@ The analysis combines curriculum text with labour-market text.
 | NUSMods API via `data/modules.csv` | Supplies module titles, descriptions, faculty, and department metadata | 7,014 raw modules; 4,032 undergraduate modules with sufficiently detailed descriptions after filtering |
 | MyCareersFuture JSON postings in `data/MyCareersFutureData/` | Supplies job titles, descriptions, structured skills, and category labels | 22,720 raw postings collected from 25 Jan 2026 to 31 Jan 2026 |
 
-For the main case study, we do not compare all departments at once. Instead, we build five curated degree proxies: Business Administration, Civil Engineering, Communications and New Media, Computer Science, and Data Science and Analytics. Each proxy consists of 23 modules, made up of 15 programme-specific modules and 8 common curriculum modules. This keeps the comparison policy-relevant while ensuring enough textual coverage to build meaningful degree profiles.
+For the main case study, we do not compare all departments at once. Instead, we build 15 curated degree proxies spanning professional, technical, and humanities domains, including Accounting, Architecture, Business Administration, Computer Science, Data Science and Analytics, Pharmacy, Psychology, and Southeast Asian Studies. Most proxies contain 23 modules, with Accounting using 24. This keeps the comparison policy-relevant while ensuring enough textual coverage to build meaningful degree profiles.
 
 ## Scope And Boundaries
 

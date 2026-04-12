@@ -4,7 +4,7 @@
 
 This report documents a retrieval-based framework for assessing how closely university curricula align with current labour-market demand. The aim is practical rather than punitive: an agency such as MOE needs an auditable way to detect where programmes appear aligned, where gaps may be emerging, and where deeper curriculum review may be warranted. The framework is therefore designed to support judgement, not replace it.
 
-The project combines NUS module descriptions with MyCareersFuture job advertisements, converts both into comparable text representations, and evaluates lexical, semantic, skill-based, hybrid, and cluster-routed ranking methods on a shared internal gold set. Cluster-routed semantic retrieval performs best overall, while the hybrid semantic-plus-skill score is nearly as strong and easier to explain because it separates semantic similarity from explicit skill coverage.
+The project combines NUS module descriptions with MyCareersFuture job advertisements, converts both into comparable text representations, and evaluates lexical, semantic, skill-based, hybrid, and cluster-routed ranking methods on an internal benchmark spanning 15 degree proxies and 616 labelled degree-job pairs. Cluster-routed semantic retrieval performs best overall, with semantic cosine and the hybrid semantic-plus-skill score close behind.
 
 ## Report Structure
 
