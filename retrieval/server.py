@@ -50,6 +50,13 @@ class SearchHTTPRequestHandler(BaseHTTPRequestHandler):
                 response = service.find_jobs(query=query, top_k=top_k)
             elif path == "/search/modules":
                 response = service.find_modules(query=query, top_k=top_k)
+            elif path == "/search/explore":
+                response = service.explore(
+                    query=query,
+                    top_jobs=int(payload.get("topJobs", 3)),
+                    top_modules=int(payload.get("topModules", 3)),
+                    top_degrees=int(payload.get("topDegrees", 3)),
+                )
             else:
                 self._send_json(status=HTTPStatus.NOT_FOUND, payload={"error": "Not found"})
                 return

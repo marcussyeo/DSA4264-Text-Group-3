@@ -119,6 +119,19 @@ class RetrievalSearchTests(unittest.TestCase):
         self.assertTrue(response.warnings)
         self.assertEqual(response.results, [])
 
+    def test_explore_job_query_returns_combined_sections(self) -> None:
+        class DummyModel:
+            def encode(self, texts, normalize_embeddings=True):
+                self.last = texts
+                return np.array([[1.0, 0.0]], dtype=np.float32)
+
+        self.service._model = DummyModel()
+        response = self.service.explore("python software engineer")
+        self.assertEqual(response.intent, "job_query")
+        self.assertEqual(response.jobs[0].title, "Software Engineer")
+        self.assertEqual(response.modules[0].moduleCode, "CS1010")
+        self.assertEqual(response.degrees[0].degreeLabel, "Computer Science")
+
 
 if __name__ == "__main__":
     unittest.main()

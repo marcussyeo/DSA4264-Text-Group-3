@@ -1,39 +1,48 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 
 import { ResultCard } from "@/components/result-card";
 import {
+  DegreeRecommendation,
+  ExplorerResponse,
   JobRecommendation,
   ModuleRecommendation,
-  SearchMode,
-  SearchResponse,
 } from "@/lib/types";
 
-type SearchDataPart = {
-  type: "data-search-results";
-  data: SearchResponse;
+const transport = new DefaultChatTransport({
+  api: "/api/chat",
+  body: () => ({
+    topJobs: 3,
+    topModules: 3,
+    topDegrees: 3,
+  }),
+});
+
+const SAMPLE_PROMPTS: { label: string; text: string }[] = [
+  {
+    label: "Data analyst · SQL & dashboards",
+    text: "Find data analyst jobs that emphasise SQL, dashboards, and experimentation.",
+  },
+  {
+    label: "Courses for cybersecurity roles",
+    text: "Which NUS courses are most relevant to cybersecurity analyst roles?",
+  },
+  { label: "Computer Science", text: "Computer Science" },
+  { label: "CS1010", text: "CS1010" },
+];
+
+type AlignmentReportPart = {
+  type: "data-alignment-report";
+  data: ExplorerResponse;
 };
 
 type TextPart = {
   type: "text";
   text: string;
 };
-
-const MODE_OPTIONS: Array<{ value: SearchMode; label: string; helper: string }> = [
-  {
-    value: "find_jobs",
-    label: "Find jobs",
-    helper: "Enter a NUS module code like CS1010 or a degree label like Computer Science.",
-  },
-  {
-    value: "find_modules",
-    label: "Find modules",
-    helper: "Enter a job title or paste a job description to retrieve relevant modules.",
-  },
-];
 
 function isTextPart(part: unknown): part is TextPart {
   return (
@@ -45,129 +54,143 @@ function isTextPart(part: unknown): part is TextPart {
   );
 }
 
-function isSearchDataPart(part: unknown): part is SearchDataPart {
+function isAlignmentReportPart(part: unknown): part is AlignmentReportPart {
   return (
     typeof part === "object" &&
     part !== null &&
     "type" in part &&
     "data" in part &&
-    (part as { type?: string }).type === "data-search-results"
+    (part as { type?: string }).type === "data-alignment-report"
   );
 }
 
-function isJobRecommendation(
-  result: JobRecommendation | ModuleRecommendation,
-): result is JobRecommendation {
-  return "jobId" in result;
+function ResultSection({
+  title,
+  eyebrow,
+  children,
+}: {
+  title: string;
+  eyebrow: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="result-section">
+      <div className="section-heading">
+        <p className="section-heading__eyebrow">{eyebrow}</p>
+        <h4>{title}</h4>
+      </div>
+      <div className="result-section__grid">{children}</div>
+    </section>
+  );
 }
 
-function isModuleRecommendation(
-  result: JobRecommendation | ModuleRecommendation,
-): result is ModuleRecommendation {
-  return "moduleCode" in result;
+function renderReport(report: ExplorerResponse, keyPrefix: string) {
+  return (
+    <div className="alignment-report" key={`${keyPrefix}-report`}>
+      {report.matchedEntity ? (
+        <div className="matched-banner">
+          <span className="matched-banner__label">Matched</span>
+          <strong>{report.matchedEntity.label}</strong>
+        </div>
+      ) : null}
+
+      {report.jobs.length > 0 ? (
+        <ResultSection
+          eyebrow="Job Ads"
+          title="Closest MyCareersFuture matches"
+        >
+          {report.jobs.map((result: JobRecommendation) => (
+            <ResultCard
+              key={`${keyPrefix}-job-${result.jobId}`}
+              kind="jobs"
+              result={result}
+            />
+          ))}
+        </ResultSection>
+      ) : null}
+
+      {report.modules.length > 0 ? (
+        <ResultSection eyebrow="Courses" title="Relevant NUS courses">
+          {report.modules.map((result: ModuleRecommendation) => (
+            <ResultCard
+              key={`${keyPrefix}-module-${result.moduleCode}`}
+              kind="modules"
+              result={result}
+            />
+          ))}
+        </ResultSection>
+      ) : null}
+
+      {report.degrees.length > 0 ? (
+        <ResultSection eyebrow="Degree Fit" title="Aligned degree programmes">
+          {report.degrees.map((result: DegreeRecommendation) => (
+            <ResultCard
+              key={`${keyPrefix}-degree-${result.degreeId}-${result.degreeLabel}`}
+              kind="degrees"
+              result={result}
+            />
+          ))}
+        </ResultSection>
+      ) : null}
+
+      {report.warnings.length > 0 ? (
+        <ul className="warning-list">
+          {report.warnings.map((warning) => (
+            <li key={`${keyPrefix}-${warning}`}>{warning}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
 }
 
 export function ChatClient() {
-  const [mode, setMode] = useState<SearchMode>("find_jobs");
   const [input, setInput] = useState("");
-
-  const transport = useMemo(
-    () =>
-      new DefaultChatTransport({
-        api: "/api/chat",
-        body: () => ({
-          mode,
-          topK: 8,
-        }),
-      }),
-    [mode],
-  );
-
-  const { messages, sendMessage, status, error } = useChat({
-    transport,
-  });
-
-  const currentMode = MODE_OPTIONS.find((option) => option.value === mode)!;
+  const { messages, sendMessage, status, error } = useChat({ transport });
 
   return (
-    <div className="chat-shell">
-      <section className="control-panel">
-        <div>
-          <p className="eyebrow">Mode</p>
-          <h2>{currentMode.label}</h2>
-          <p className="helper">{currentMode.helper}</p>
-        </div>
-        <div className="toggle-row" role="tablist" aria-label="Search mode">
-          {MODE_OPTIONS.map((option) => (
-            <button
-              className={option.value === mode ? "mode-pill mode-pill--active" : "mode-pill"}
-              key={option.value}
-              onClick={() => setMode(option.value)}
-              type="button"
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      </section>
-
+    <section className="chat-shell">
       <section className="transcript">
-        {messages.length === 0 ? (
-          <div className="empty-state">
-            <h3>Start a retrieval chat</h3>
-            <p>
-              This interface keeps the conversation format familiar, but every turn is a deterministic
-              retrieval request against your NUS and MyCareersFuture index.
-            </p>
-          </div>
-        ) : null}
+        <div className="empty-state">
+          <div className="empty-state__badge">MOE Officer Copilot</div>
+          <h3>
+            Search job ads in natural language and inspect course fit instantly
+          </h3>
+          <p>
+            The assistant searches the filtered MyCareersFuture corpus,
+            recommends relevant NUS courses, and highlights aligned degree
+            programmes using the revised notebook caches.
+          </p>
+        </div>
 
         {messages.map((message) => {
           const textParts = message.parts?.filter(isTextPart) ?? [];
-          const searchParts = message.parts?.filter(isSearchDataPart) ?? [];
+          const reportParts =
+            message.parts?.filter(isAlignmentReportPart) ?? [];
 
           return (
             <article
-              className={message.role === "user" ? "message message--user" : "message message--assistant"}
+              className={
+                message.role === "user"
+                  ? "message message--user"
+                  : "message message--assistant"
+              }
               key={message.id}
             >
-              <div className="message__meta">{message.role === "user" ? "You" : "Assistant"}</div>
+              <div className="message__meta">
+                {message.role === "user" ? "You" : "MOE Officer Copilot"}
+              </div>
               {textParts.map((part, index) => (
-                <p className="message__text" key={`${message.id}-text-${index}`}>
+                <p
+                  className="message__text"
+                  key={`${message.id}-text-${index}`}
+                >
                   {part.text}
                 </p>
               ))}
-              {searchParts.map((part, index) => (
-                <div className="result-group" key={`${message.id}-results-${index}`}>
-                  {part.data.matchedEntity ? (
-                    <p className="result-group__label">
-                      Matched entity: <strong>{part.data.matchedEntity.label}</strong>
-                    </p>
-                  ) : null}
-                  {part.data.results.map((result) =>
-                    part.data.mode === "find_jobs" && isJobRecommendation(result) ? (
-                      <ResultCard
-                        key={`${message.id}-${result.jobId}`}
-                        mode="find_jobs"
-                        result={result}
-                      />
-                    ) : part.data.mode === "find_modules" && isModuleRecommendation(result) ? (
-                      <ResultCard
-                        key={`${message.id}-${result.moduleCode}`}
-                        mode="find_modules"
-                        result={result}
-                      />
-                    ) : null
-                  )}
-                  {part.data.warnings.length > 0 ? (
-                    <ul className="warning-list">
-                      {part.data.warnings.map((warning) => (
-                        <li key={warning}>{warning}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-              ))}
+              {reportParts.map((part, index) =>
+                renderReport(part.data, `${message.id}-${index}`),
+              )}
             </article>
           );
         })}
@@ -181,44 +204,54 @@ export function ChatClient() {
           if (!text) {
             return;
           }
-          sendMessage(
-            {
-              text,
-            },
-            {
-              body: {
-                mode,
-                topK: 8,
-              },
-            },
-          );
+          sendMessage({ text });
           setInput("");
         }}
       >
-        <textarea
-          aria-label="Chat input"
-          className="composer__input"
-          onChange={(event) => setInput(event.target.value)}
-          placeholder={
-            mode === "find_jobs"
-              ? "Try CS1010 or Computer Science"
-              : "Try Data Analyst or paste a job description"
-          }
-          rows={4}
-          value={input}
-        />
+        <div className="composer__panel">
+          <textarea
+            aria-label="Chat input"
+            className="composer__input"
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Ask about a role, paste a job description, or enter a degree name / module code..."
+            rows={5}
+            value={input}
+          />
+        </div>
+        <div className="composer__suggestions" aria-label="Sample prompts">
+          <span className="composer__suggestions-label">Try</span>
+          <div className="composer__suggestions-track">
+            {SAMPLE_PROMPTS.map(({ label, text }) => (
+              <button
+                className="prompt-chip prompt-chip--compact"
+                key={text}
+                onClick={() => setInput(text)}
+                title={text}
+                type="button"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="composer__footer">
           <span className="helper">
             {status === "submitted" || status === "streaming"
-              ? "Searching..."
-              : "Results are deterministic and come from the retrieval backend."}
+              ? "Searching jobs, courses, and degree profiles..."
+              : "The app uses notebook-derived retrieval signals rather than a free-form answer only."}
           </span>
-          <button className="send-button" disabled={!input.trim() || status === "submitted" || status === "streaming"} type="submit">
-            Send
+          <button
+            className="send-button"
+            disabled={
+              !input.trim() || status === "submitted" || status === "streaming"
+            }
+            type="submit"
+          >
+            Explore
           </button>
         </div>
         {error ? <p className="error-text">{error.message}</p> : null}
       </form>
-    </div>
+    </section>
   );
 }

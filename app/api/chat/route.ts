@@ -1,7 +1,7 @@
 import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 
-import { runSearch } from "@/lib/search-api";
-import { ChatRequestBody, SearchMode, SearchResponse } from "@/lib/types";
+import { runAlignmentExplorer } from "@/lib/search-api";
+import { ChatRequestBody, ExplorerResponse } from "@/lib/types";
 
 export const maxDuration = 30;
 
@@ -26,20 +26,28 @@ function extractLatestUserText(
   );
 }
 
-function buildSummary(mode: SearchMode, result: SearchResponse): string {
-  if (result.results.length === 0) {
-    return result.warnings[0] ?? "No results found.";
+function buildSummary(result: ExplorerResponse): string {
+  if (
+    result.jobs.length === 0 &&
+    result.modules.length === 0 &&
+    result.degrees.length === 0
+  ) {
+    return result.warnings[0] ?? "I couldn't find a useful alignment result for that query.";
   }
 
-  const noun = mode === "find_jobs" ? "job listings" : "modules";
-  const entityLabel = result.matchedEntity?.label ?? result.normalizedQuery;
-  return `Here are the top ${result.results.length} ${noun} for ${entityLabel}.`;
+  if (result.intent === "degree_lookup" && result.matchedEntity) {
+    return `I matched ${result.matchedEntity.label} to the curated degree profile and pulled the strongest job ads plus representative courses from its curriculum basket.`;
+  }
+
+  if (result.intent === "module_lookup" && result.matchedEntity) {
+    return `I matched ${result.matchedEntity.label} to an exact NUS course, then surfaced nearby job ads and the degree baskets that include it.`;
+  }
+
+  return `I found ${result.jobs.length} job ads, ${result.modules.length} relevant NUS courses, and ${result.degrees.length} aligned degree programmes for your query.`;
 }
 
 export async function POST(request: Request) {
   const body = (await request.json()) as ChatRequestBody;
-  const mode: SearchMode = body.mode ?? "find_jobs";
-  const topK = body.topK ?? 8;
   const messages = body.messages ?? [];
   const query = extractLatestUserText(messages);
 
@@ -52,9 +60,14 @@ export async function POST(request: Request) {
     });
   }
 
-  const searchResponse = await runSearch(mode, query, topK);
-  const summary = buildSummary(mode, searchResponse);
-  const textId = "search-summary";
+  const explorerResponse = await runAlignmentExplorer(
+    query,
+    body.topJobs ?? 3,
+    body.topModules ?? 3,
+    body.topDegrees ?? 3,
+  );
+  const summary = buildSummary(explorerResponse);
+  const textId = "alignment-summary";
 
   return createUIMessageStreamResponse({
     stream: createUIMessageStream({
@@ -73,8 +86,8 @@ export async function POST(request: Request) {
           id: textId,
         });
         writer.write({
-          type: "data-search-results",
-          data: searchResponse,
+          type: "data-alignment-report",
+          data: explorerResponse,
         });
       },
     }),
