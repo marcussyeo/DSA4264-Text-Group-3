@@ -1,5 +1,7 @@
 beautifulsoup4
 hdbscan
+ipykernel
+ipywidgets
 matplotlib
 numpy
 pandas
@@ -7,5 +9,6 @@ pyarrow
 requests
 scikit-learn
 scipy
+seaborn
 sentence-transformers
 tqdm
