@@ -1,5 +1,6 @@
 import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 
+import { buildFallbackNarrative, generateGroundedNarrative } from "@/lib/llm";
 import { runAlignmentExplorer } from "@/lib/search-api";
 import { ChatRequestBody, ExplorerResponse } from "@/lib/types";
 
@@ -8,7 +9,9 @@ export const maxDuration = 30;
 function extractLatestUserText(
   messages: Array<{ role?: string; parts?: Array<Record<string, unknown>> }>,
 ): string {
-  const latestUserMessage = [...messages].reverse().find((message) => message.role === "user");
+  const latestUserMessage = [...messages]
+    .reverse()
+    .find((message) => message.role === "user");
   if (!latestUserMessage) {
     return "";
   }
@@ -32,7 +35,10 @@ function buildSummary(result: ExplorerResponse): string {
     result.modules.length === 0 &&
     result.degrees.length === 0
   ) {
-    return result.warnings[0] ?? "I couldn't find a useful alignment result for that query.";
+    return (
+      result.warnings[0] ??
+      "I couldn't find a useful alignment result for that query."
+    );
   }
 
   if (result.intent === "degree_lookup" && result.matchedEntity) {
@@ -66,12 +72,43 @@ export async function POST(request: Request) {
     body.topModules ?? 3,
     body.topDegrees ?? 3,
   );
-  const summary = buildSummary(explorerResponse);
   const textId = "alignment-summary";
 
   return createUIMessageStreamResponse({
     stream: createUIMessageStream({
       execute: async ({ writer }) => {
+        const summary = buildSummary(explorerResponse);
+        let narrative: string;
+        let replySource: "llm" | "fallback";
+
+        try {
+          narrative = await generateGroundedNarrative(query, explorerResponse);
+          replySource = "llm";
+          if (narrative.trim()) {
+            console.log("[chat] narrative: llm", {
+              preview: narrative.slice(0, 120),
+            });
+          } else {
+            console.log(
+              "[chat] narrative: llm returned empty; will use buildSummary if needed",
+            );
+          }
+        } catch (err) {
+          narrative = buildFallbackNarrative(query, explorerResponse);
+          replySource = "fallback";
+          console.warn("[chat] narrative: fallback (LLM threw)", {
+            message: err instanceof Error ? err.message : String(err),
+            preview: narrative.slice(0, 120),
+          });
+        }
+
+        const responseText = narrative.trim() || summary;
+        const usedSummary = responseText === summary;
+        console.log("[chat] reply outcome", {
+          replySource,
+          usedSummary,
+        });
+
         writer.write({
           type: "text-start",
           id: textId,
@@ -79,12 +116,13 @@ export async function POST(request: Request) {
         writer.write({
           type: "text-delta",
           id: textId,
-          delta: summary,
+          delta: responseText,
         });
         writer.write({
           type: "text-end",
           id: textId,
         });
+
         writer.write({
           type: "data-alignment-report",
           data: explorerResponse,

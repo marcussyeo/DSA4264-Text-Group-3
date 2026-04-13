@@ -30,8 +30,8 @@ const SAMPLE_PROMPTS: { label: string; text: string }[] = [
     label: "Courses for cybersecurity roles",
     text: "Which NUS courses are most relevant to cybersecurity analyst roles?",
   },
-  { label: "Computer Science", text: "Computer Science" },
-  { label: "CS1010", text: "CS1010" },
+  { label: "Mechanical Engineer", text: "Mechanical Engineer" },
+  { label: "CS2040", text: "CS2040" },
 ];
 
 type AlignmentReportPart = {
@@ -148,6 +148,17 @@ export function ChatClient() {
   const [input, setInput] = useState("");
   const { messages, sendMessage, status, error } = useChat({ transport });
 
+  const busy = status === "submitted" || status === "streaming";
+
+  function sendFromInput() {
+    const text = input.trim();
+    if (!text || busy) {
+      return;
+    }
+    sendMessage({ text });
+    setInput("");
+  }
+
   return (
     <section className="chat-shell">
       <section className="transcript">
@@ -158,8 +169,9 @@ export function ChatClient() {
           </h3>
           <p>
             The assistant searches the filtered MyCareersFuture corpus,
-            recommends relevant NUS courses, and highlights aligned degree
-            programmes using the revised notebook caches.
+            recommends relevant NUS courses, highlights aligned degree
+            programmes, and can turn those retrieval results into a grounded
+            natural-language explanation.
           </p>
         </div>
 
@@ -200,12 +212,7 @@ export function ChatClient() {
         className="composer"
         onSubmit={(event) => {
           event.preventDefault();
-          const text = input.trim();
-          if (!text) {
-            return;
-          }
-          sendMessage({ text });
-          setInput("");
+          sendFromInput();
         }}
       >
         <div className="composer__panel">
@@ -213,6 +220,13 @@ export function ChatClient() {
             aria-label="Chat input"
             className="composer__input"
             onChange={(event) => setInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter" || event.shiftKey) {
+                return;
+              }
+              event.preventDefault();
+              sendFromInput();
+            }}
             placeholder="Ask about a role, paste a job description, or enter a degree name / module code..."
             rows={5}
             value={input}
@@ -237,14 +251,12 @@ export function ChatClient() {
         <div className="composer__footer">
           <span className="helper">
             {status === "submitted" || status === "streaming"
-              ? "Searching jobs, courses, and degree profiles..."
-              : "The app uses notebook-derived retrieval signals rather than a free-form answer only."}
+              ? "Searching jobs, courses, degree profiles, and composing a grounded summary..."
+              : "The app uses notebook-derived retrieval signals first, then optionally adds an LLM-written explanation."}
           </span>
           <button
             className="send-button"
-            disabled={
-              !input.trim() || status === "submitted" || status === "streaming"
-            }
+            disabled={!input.trim() || busy}
             type="submit"
           >
             Explore

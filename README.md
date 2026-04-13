@@ -104,6 +104,7 @@ This repository also includes a browser-based chat interface that wraps the Pyth
 
 - In `Find jobs` mode, enter a NUS module code like `CS1010` or a degree label like `Computer Science` to retrieve relevant job listings.
 - In `Find modules` mode, enter a job title or paste a job description to retrieve relevant NUS modules.
+- The chat route can optionally call an LLM to turn the retrieved evidence into a grounded natural-language explanation while still showing the raw evidence cards underneath.
 
 ### Setup
 
@@ -141,14 +142,34 @@ This repository also includes a browser-based chat interface that wraps the Pyth
 
 ### Environment variables
 
-Create `.env.local` from `.env.example` if you want to point the web app at a non-default retrieval server URL.
+Create `.env.local` from `.env.example` if you want to point the web app at a non-default retrieval server URL or enable the grounded LLM summary layer.
+
+```bash
+cp .env.example .env.local
+```
+
+For retrieval only:
+
+```env
+RETRIEVAL_API_BASE_URL=http://127.0.0.1:8000
+```
+
+To enable OpenAI-backed responses in `/app/api/chat`, add:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-5.4-mini
+OPENAI_REASONING_EFFORT=low
+```
+
+How the LLM layer works:
+
+- The retrieval backend still determines which jobs, modules, and degrees are shown.
+- The LLM only sees the retrieved evidence and is instructed to write a concise grounded explanation.
+- If `OPENAI_API_KEY` is missing or the API call fails, the app falls back to a deterministic retrieval-only summary instead of breaking the chat flow.
 
 ## Scripts
 
 See [`scripts/README.md`](scripts/README.md) for full documentation on all available scripts.
 
 > **Note:** Scripts are available to scrape NTU module information (`get_ntu_module_info.py` and `get_ntu_module_descriptions.py`), but NTU data will **not** be included in our analysis due to time constraints.
-
-## Contributed By
-
-- TODO
