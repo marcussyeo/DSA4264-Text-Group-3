@@ -8,25 +8,32 @@ At a high level, the pipeline cleans both corpora, constructs degree-level text 
 
 ## Data Preparation
 
-Module preprocessing starts from `data/modules.csv`, which is generated from the NUSMods API. HTML is stripped from descriptions, whitespace is normalised, module level is inferred from the module code, and only undergraduate modules with non-trivial descriptions are retained. This reduces the module corpus from 7,014 raw records to 4,032 usable module descriptions across 18 faculties and 75 departments. The filtering is important because sparse or empty descriptions would add noise without improving retrieval quality.
-
-Job preprocessing is more involved because job ads contain both scope noise and duplicate postings. We flatten the MyCareersFuture JSON structure into a tabular format, extract structured fields such as categories and skills, and remove formatting noise from the job description text. We then apply policy-motivated scope filters. Ads for tuition and teaching, academia, internships, and very senior leadership roles are excluded because they are poor comparators for typical undergraduate curriculum outcomes. This removes 1,848 postings. Among the remaining in-scope ads, we collapse exact reposts and then run a semantic near-duplicate pass within repeated title-company blocks. The final retrieval corpus contains 17,346 job ads.
-
-| Job-corpus stage | Count |
-| --- | ---: |
-| Raw MyCareersFuture postings | 22,720 |
-| Out-of-scope postings removed | 1,848 |
-| In-scope postings before exact deduplication | 20,872 |
-| After exact deduplication | 17,463 |
-| Final corpus after semantic near-duplicate removal | 17,346 |
-
-This cleaning stage directly addresses rubric expectations around robustness. Without scope control, the system would over-credit programmes for matching internships or academic roles that are not comparable to the policy question. Without duplicate control, frequently reposted jobs would distort the inferred importance of certain occupations.
+The data was cleaned and preprocessed as detailed in the Data section.
 
 ## Degree Profile Construction
 
-Instead of treating an entire department as a degree, the notebook constructs 15 curated degree proxies. Most contain 23 modules built from 15 degree-specific modules and 8 common curriculum modules; Accounting contains 24 modules. The resulting profiles range from 2,794 to 3,545 words and cover business, engineering, computing, health, and humanities domains.
+### Rationale
 
-To score degree-to-job alignment, we first compute module-level similarities and then aggregate using the mean of the top five module scores for each degree. This top-5 aggregation avoids letting a single unusually well-matched module dominate the degree score, while still rewarding degrees that contain multiple relevant modules. The choice is theoretically sensible for curriculum review because a programme should be credited when alignment is distributed across the curriculum rather than concentrated in one elective.
+Employers do not hire based on whether a student took a specific course but rather on the degree programme as a whole. Therefore, our framework operates at the degree level and not the module level.
+
+### Degree and Module Selection
+
+We construct 15 degree profiles using a curated module lists. For each degree, the module basket consists of:
+
+| Component | Count | Description |
+|:---|:---:|:---|
+| **Core modules** | 15 | Degree-specific required courses |
+| **Common curriculum modules** | 8-9 | University-level requirements |
+| **Total per degree** | 23-24 | Combined text from all modules |
+
+**Note:** Not every degree has exactly 23 modules. The actual counts vary slightly depending on the specific programme structure (e.g., Accounting has 24 modules). However, we ensure that all degrees are represented almost equally by keeping the module count for each degree within a tight range (23-24 modules). This prevents any single degree from dominating similarity scores simply because it has more textual content.
+
+The 15 degrees are chosen to represent the major undergraduate programmes in NUS across technical and non-technical domains, capturing the specturm of skills reflected in the EDA.<br>
+- **Faculty of Science**: Data Science and Analytics (dsa), Data Science and Economics (dse) and Pharmacy (pharm)<br>
+- **Faculty of Arts and Social Science**: Communications and New Media (cnm), History (hist), Psychology (psych) and Southeast Asian Studies (sea)<br>
+- **NUS Business School**: Business Administration (biz) and Accountancy (acc)<br>
+- **NUS Computing**: Computer Science (cs) and Business Analytics (bza)<br>
+- **College of Desgin and Engineering**: Civil Engineering (ce), Chemical Engineering (chem_eng), Electrical Engineering (ee) and Architecture (archi)<br> 
 
 ## Alignment Methods
 

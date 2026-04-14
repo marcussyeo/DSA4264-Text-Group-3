@@ -17,6 +17,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Project Overview: project-overview.md
+  - Data: data.md
   - Methodology: methodology.md
   - Results: results.md
   - Appendix: appendix.md
