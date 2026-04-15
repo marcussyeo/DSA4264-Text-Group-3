@@ -1,12 +1,10 @@
 # Data
 
-This section describes the datasets used and key preprocessing decisions. The goal is not only to ensure data quality, but to justify how the data supports a scalable and valid framework for curriculum–job alignment.
+This section describes the datasets used and key preprocessing decisions. The objective is to ensure data quality while supporting a scalable and valid framework for curriculum–job alignment.
 
 ---
 
-## Data Cleaning and Preprocessing
-
-Refer to the Appendix on the detailed step list of the data cleaning.
+## Data Overview
 
 ### NUSMods 
 
@@ -20,15 +18,6 @@ Course data was retrieved from the NUSMods API and compiled into `modules.csv` (
 | `faculty` | Offering faculty |
 | `prerequisite` | Required modules |
 | `moduleCredit` | Credit units |
-
-!!! info "Cleaning and Design Decisions"
-    - **Missing descriptions (147 rows)** replaced with titles; experience-based modules excluded to reduce noise  
-    - **Uniqueness enforced** via `moduleCode`  
-    - **Level feature (`level_band`)** derived from module codes  
-
-!!! note "Relevance to Framework"
-    Module descriptions form the **primary semantic signal** for degree representations.  
-    Removing experience-based modules ensures consistency and reduces noise in embedding-based matching.
 
 ---
 
@@ -46,22 +35,11 @@ The dataset consists of 22,720 job postings, flattened from JSON into structured
 | `posted_date` / `expiry_date` | Posting dates |
 | `position_levels` | Seniority level |
 
-!!! info "Cleaning and Design Decisions"
-    - **Multi-label fields preserved as lists** (`skills`, `categories`, etc.)  
-    - **Datetime conversion** for temporal fields  
-    - **Feature engineering:**
-        - `salary_mid`  
-        - `posting_window_days`  
-        - `primary_category`, `primary_position_level`  
-
-!!! note "Relevance to Framework"
-    Preserving multi-label structure enables accurate skill matching and similarity computation, avoiding information loss from flattening.
-
 ---
 
 ## Exploratory Data Analysis (EDA)
 
-EDA identifies structural properties that directly inform modelling choices and potential sources of bias.
+EDA identifies structural properties that inform modelling choices and potential sources of bias.
 
 ---
 
@@ -74,10 +52,10 @@ EDA identifies structural properties that directly inform modelling choices and 
 *Figure 1: Module representation is uneven, with FASS, CDE, and Science dominating the corpus.*
 
 !!! tip "Implications for Framework"
-    - Risk of representation bias in similarity-based matching  
+    - Risk of representation bias in similarity matching  
     - Mitigation:
         - Construct degree-specific module baskets (≈15 core + 8 common modules)  
-        - Use length-normalised embeddings to ensure fair comparison  
+        - Use length-normalised embeddings for fair comparison  
 
 ---
 
@@ -88,7 +66,7 @@ EDA identifies structural properties that directly inform modelling choices and 
 *Figure 2: Most descriptions fall within 60–100 words, with few long outliers (>250 words).*
 
 !!! tip "Implications for Framework"
-    Module descriptions provide sufficient semantic content for embeddings.  
+    Descriptions provide sufficient semantic signal for embeddings.  
     Text length is bounded during profile construction to control computational cost.
 
 ---
@@ -99,11 +77,11 @@ EDA identifies structural properties that directly inform modelling choices and 
 
 ![Top Job Market Features](assets/EDA_job_skill_dist.png)
 
-*Figure 3: Soft skills (e.g., teamwork, communication) dominate in frequency across job postings.*
+*Figure 3: Soft skills (e.g., teamwork, communication) dominate job postings.*
 
 !!! tip "Implications for Framework"
-    These skills are non-discriminative and introduce noise in similarity matching.  
-    They are removed during preprocessing to improve signal quality.
+    These skills are non-discriminative and introduce noise.  
+    They are removed during preprocessing.
 
 ---
 
@@ -111,10 +89,10 @@ EDA identifies structural properties that directly inform modelling choices and 
 
 ![Category Co-occurrence](assets/EDA_job.png)
 
-*Figure 4: Job categories frequently span multiple categories, reflecting overlapping functional roles.*
+*Figure 4: Job categories frequently co-occur, reflecting overlapping roles.*
 
 !!! tip "Implications for Framework"
-    Categories are retained as structured features, enabling richer representation beyond plain text.
+    Categories are retained as structured features to enrich representations.
 
 ---
 
@@ -122,24 +100,40 @@ EDA identifies structural properties that directly inform modelling choices and 
 
 ![Min Years Experience](assets/EDA_job_seniority.png)
 
-*Figure 5: Entry and junior roles dominate postings, but there still exist senior positions.*
+*Figure 5: Entry-level roles dominate, though senior roles exist.*
 
 !!! tip "Implications for Framework"
-    - Aligns with fresh graduate outcomes
+    - Aligns with graduate outcomes  
     - Senior roles are excluded to maintain relevance  
 
 ---
 
-## Golden Test Set for Validation
+## Data Cleaning and Preprocessing 
 
-While the dataset provides broad coverage (22,720 job postings and 7,015 modules),  
-there is no layer for validation. 
+### NUSMods
 
-!!! note "Next Step"
-    Validation is addressed in subsequent sections through:
-    - Human evaluation of job–course matches  
-    - Coverage metrics (% of jobs and modules matched)  
+1. **Standardise text**: Remove HTML and normalise whitespace  
 
-    This ensures the framework is not only scalable, but also aligned with human judgement.
+2. **Handle missing descriptions**: Use title as fallback if informative and exclude generic modules (e.g., internship, UROPS)
 
-As such, we create a golden test set to evaluate the validity of matching. Refer to the Appendix for details on the golden test set.
+3. **Construct module text**: Combine cleaned title and description  
+
+4. **Filter by relevance**: Derive module level from code  and retain undergraduate modules  
+
+5. **Remove low-quality entries**: Drop modules without sufficient text  
+
+---
+
+### MyCareersFuture Job Ads
+
+1. **Parse and structure data**: Convert JSON into structured format and preserve multi-label fields 
+
+2. **Clean text fields**: Remove HTML, URLs, and boilerplate, then filter low-information descriptions  
+
+3. **Clean skills**: Standardise text (lowercase), remove generic soft skills and retain meaningful technical terms  
+
+4. **Filter by scope**: Exclude internships, academic, and senior roles  
+
+5. **Deduplicate postings**: Remove exact and near-duplicates  
+
+6. **Construct job text**: Combine title, categories, skills and truncated description  
