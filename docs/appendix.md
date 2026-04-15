@@ -233,7 +233,7 @@ For each degree, a curated set of modules was selected to form the degree profil
 - **Core programme requirements**, which define the degree-specific required courses  
 - **University-level requirements**, which capture necessary vourses all NUS grads have to take for a holistic learning (differs from faculty to faculty as each may have their own iteration of the course)  
 
-These modules contribute to transferable skills such as:
+These modules contribute to transferable skills such as:<br>
 - Communication  
 - Critical thinking  
 - Interdisciplinary understanding  
