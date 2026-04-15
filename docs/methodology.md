@@ -10,7 +10,7 @@ We clean module descriptions and job ads, remove postings outside entry-to-mid-c
 
 ## Degree Profile Construction
 
-Alignment is estimated at the degree level because employers hire from programmes, not from individual modules. Each of the 15 NUS degree profiles aggregates 23-24 curated modules, combining core requirements with common curriculum so programmes are represented comparably. The selected degrees span computing, engineering, business, science, and humanities, which lets the evaluation cover both direct occupational pipelines and broader degrees.
+Alignment is estimated at the degree level because employers hire from programmes, not from individual modules. Each of the 15 NUS degree profiles aggregates 23-24 curated modules, combining core requirements with common curriculum so programmes are represented comparably. The selected degrees span computing, engineering, business, science, and humanities, which lets the evaluation cover both direct occupational pipelines and broader degrees. 
 
 ## Alignment Methods
 

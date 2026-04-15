@@ -15,6 +15,8 @@ The documentation site is written in Markdown and rendered with MkDocs Material 
 
 To rebuild the documentation locally, install `requirements-docs.txt` and run `mkdocs serve`. To refresh the demo artifacts, run `.venv/bin/python scripts/build_chat_index.py`, then start the API with `.venv/bin/python scripts/run_retrieval_server.py` and the frontend with `npm run dev`.
 
+---
+
 ## Notes On Interpretation
 
 - The notebook analysis profiles 15 curated degree proxies, while the app is a lighter exploratory interface.
