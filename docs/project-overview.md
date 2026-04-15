@@ -10,7 +10,7 @@ Curriculum relevance is multi-dimensional and should not be reduced to a single 
 
 The main stakeholder is MOE, which needs evidence that is scalable, explainable, and robust enough for policy discussion. Universities are a second stakeholder because they need interpretable evidence when reviewing core modules, electives, and common curriculum requirements. Students and employers also benefit indirectly: students gain a clearer picture of which learning pathways connect to job families, while employers gain a better articulation of where university training already overlaps with industry needs.
 
-These stakeholder needs shape the design choices in this report. We prioritise transparent retrieval methods over opaque end-to-end prediction, preserve textual evidence for every match, and report limitations explicitly so that the framework supports deliberation rather than replacing it.
+The design choices in this report are guided by stakeholder needs. We prioritise transparent retrieval methods over opaque end-to-end prediction, preserve textual evidence for every match, and report limitations explicitly so that the framework supports deliberation rather than replacing it.
 
 ## Data Sources
 
