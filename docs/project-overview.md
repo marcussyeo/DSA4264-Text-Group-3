@@ -2,9 +2,9 @@
 
 ## Policy Problem
 
-This project addresses a public-policy question: how can a ministry or university evaluate whether curriculum content is keeping pace with labour-market demand without relying on anecdote, media narratives, or one-off employer surveys? In practice, curriculum review is slow, while job demand changes quickly. A scalable text-analytic framework can therefore act as an early warning system. It can surface where a programme appears strongly aligned with current occupations, where alignment is mixed, and where human review may be needed.
+This project addresses a public-policy question: how can a ministry or university evaluate whether curriculum content is keeping pace with labour-market demand without relying on anecdote, media narratives, or one-off employer surveys? In practice, curriculum review is slow, while job demand changes quickly. A scalable text-analytic framework can therefore act as an early warning system by surfacing where alignment appears strong, mixed, or in need of human review.
 
-The framework is designed for decision support, not automated judgement. Curriculum relevance is multi-dimensional and should not be reduced to a single score. Some programmes intentionally serve broad civic, scientific, or foundational goals that do not map neatly to short-term job ads. For that reason, our output is best interpreted as a structured signal about present labour-market alignment rather than a final statement about programme quality.
+Curriculum relevance is multi-dimensional and should not be reduced to a single score. Some programmes intentionally serve broad civic, scientific, or foundational goals that do not map neatly to short-term job ads, so the outputs should be read as structured evidence about present labour-market alignment rather than a final statement about programme quality.
 
 ## Stakeholders And Intended Use
 

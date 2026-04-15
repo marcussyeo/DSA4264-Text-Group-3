@@ -24,6 +24,12 @@ Some disciplines benefit more from direct vocabulary overlap. Communications and
 
 The weakest results remain in diffuse humanities labour markets. History and Southeast Asian Studies achieve best `NDCG@5` scores of only `0.170` and `0.161` respectively, and no method attains non-zero `Precision@3` for Southeast Asian Studies. Psychology is a useful edge case: hybrid reaches `Precision@3 = 1.000` and `NDCG@5 = 0.869`, but Spearman remains low at `0.111`, which is precisely why the report prioritises pairwise agreement and `NDCG@5` over full-list correlation.
 
+## Worked Example
+
+Civil Engineering shows why the strongest methods are plausible to a policy reader. The top-ranked jobs returned by the semantic-family methods include `Design Engineer/Senior Design Engineer`, `Civil & Structural Engineer / Assistant Civil & Structural Manager`, and `Project Engineer _Civil & Structural`. Their descriptions repeatedly mention drainage, temporary works, structural drawings, tender submissions, site coordination, and compliance with engineering codes. These are not just generic professional terms; they map directly onto the degree's emphasis on structures, infrastructure systems, construction methods, and project delivery.
+
+The same example also shows what the evaluation is testing. It is not enough for a method to retrieve a vaguely technical role. The better methods place clearly civil-engineering roles near the top and keep obvious contrast cases such as nursing or hospitality postings much lower. This is why Civil Engineering achieves both high pairwise agreement and perfect `NDCG@5` for the strongest semantic-family methods: the ordering is not only relevant in aggregate, but substantively credible when individual job descriptions are read.
+
 ## Interpretation And Recommendations
 
 The evaluation supports a two-tier recommendation. Hybrid semantic + skill is the best primary method for overall benchmarking because it leads on the main agreement metric and remains easy to explain. Cluster-routed semantic is the strongest complementary method when the goal is to surface the best shortlists, since it leads on graded top-5 ranking, `Precision@1`, and `Precision@5`. In policy terms, the framework is most credible as a monitoring tool: strong scores indicate clear curriculum-job pipelines, while weaker scores flag areas for qualitative review rather than automatic judgement.
