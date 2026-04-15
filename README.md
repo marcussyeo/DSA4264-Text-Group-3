@@ -2,15 +2,23 @@
 
 This project aims to develop a credible, scalable, and validated framework for assessing how well university curricula align with labour market needs. Rather than determining whether universities are performing “well” or “poorly,” the goal is to provide MOE with a systematic way to evaluate curriculum-job alignment at scale.
 
-## Dataset
+## Data
 
 1. Job ads from `MyCareersFuture` between **25 Jan 2026 and 31 Jan 2026** (Restricted)
 2. NUS module information from `NUSMods` API (Public)
 
 ## Prerequisites
 
-- **Job ads data:** The MyCareersFuture dataset is large. Download it from [Google Drive](https://drive.google.com/file/d/1lmGbsgpxBRtl1tZTsasUbEEYy-STIqcA/view) and place it in the `data/` folder before running any analysis.
-- **NUS modules data:** Run `python scripts/get_module_info.py` to fetch module data from the NUSMods API and generate `modules.csv` in `data/`.
+**Job ads data:** The MyCareersFuture dataset is large and access-controlled. **Reach out to the project owners for a download link,** then unpack it under `data/` so job files are available at `data/MyCareersFutureData/*.json` before you run any analysis.
+
+`notebooks/main.ipynb` reads those JSON job ads and the CSV inputs in the table below. For the job archive and for any CSV you cannot produce locally (degree map, skills extraction, gold evaluation set, and similar), **contact the project owners for download links**.
+
+| Path                                                 | Role                                                     |
+| ---------------------------------------------------- | -------------------------------------------------------- |
+| `data/modules.csv`                                   | NUS module catalogue (see `get_module_info.py` above).   |
+| `data/degree_to_module_map.csv`                      | Maps each degree programme to its constituent modules.   |
+| `data/nus_modules_skills_output.csv`                 | Per-module skill signals used for skill-based alignment. |
+| `notebooks/evaluation/gold_degree_job_alignment.csv` | Gold degree–job pairs and labels for evaluation.         |
 
 ## Local Setup
 
@@ -59,7 +67,7 @@ This project uses Python 3.12+ with a virtual environment.
    pip install -r requirements.txt
    ```
 
-7. Run your first cell in `nus.ipynb`
+7. **Run the analysis:** With the data laid out as in **Prerequisites**, open [`notebooks/main.ipynb`](notebooks/main.ipynb) and run the notebook from the first cell downward.
 
 ## Technical Report
 
@@ -69,6 +77,7 @@ If you are editing the technical report, start from:
 
 - [`docs/index.md`](docs/index.md)
 - [`docs/project-overview.md`](docs/project-overview.md)
+- [`docs/data.md`](docs/data.md)
 - [`docs/methodology.md`](docs/methodology.md)
 - [`docs/results.md`](docs/results.md)
 - [`docs/appendix.md`](docs/appendix.md)
@@ -114,33 +123,44 @@ This repository also includes a browser-based chat interface that wraps the Pyth
    pip install -r requirements.txt
    ```
 
-2. Install the web app dependencies:
+2. **Ensure Node.js is installed.** The UI is a Next.js app; use a current [Node.js](https://nodejs.org/) LTS (20.x or newer is a safe choice). Check your toolchain:
+
+   ```bash
+   node --version
+   npm --version
+   ```
+
+   If those commands are missing, install Node from the link above or via `nvm`, Homebrew, or your OS package manager.
+
+3. Install the web app dependencies:
 
    ```bash
    npm install
    ```
 
-3. Build the retrieval artifacts:
+4. Build the retrieval artifacts (optional if you ran the entire `notebooks/main.ipynb`):
 
    ```bash
    .venv/bin/python scripts/build_chat_index.py
    ```
 
-4. Start the retrieval API:
+   **Note:** This script reads and writes `notebooks/cache/`, the same directory populated by [`notebooks/main.ipynb`](notebooks/main.ipynb). It skips work when matching parquet, embedding, and JSON files are already present (omit `--force` unless you want a full rebuild), so a prior full notebook run usually avoids recomputing the expensive steps. Once the notebook and this script have produced a complete cache for your setup, you do not need to run the indexer again until you change source data, models, or cache paths.
+
+5. Start the retrieval API (Backend):
 
    ```bash
    .venv/bin/python scripts/run_retrieval_server.py
    ```
 
-5. In a second terminal, start the Next.js app:
+6. In a second terminal, start the Next.js app (Frontend):
 
    ```bash
    npm run dev
    ```
 
-6. Open [http://localhost:3000](http://localhost:3000)
+7. Open [http://localhost:3000](http://localhost:3000)
 
-### Environment variables
+### Environment variables (Used for Chat only)
 
 Create `.env.local` from `.env.example` if you want to point the web app at a non-default retrieval server URL or enable the grounded LLM summary layer.
 
@@ -158,7 +178,7 @@ To enable OpenAI-backed responses in `/app/api/chat`, add:
 
 ```env
 OPENAI_API_KEY=your_api_key_here
-OPENAI_MODEL=gpt-5.4-mini
+OPENAI_MODEL=gpt-5.4-mini-2026-03-17
 OPENAI_REASONING_EFFORT=low
 ```
 
