@@ -55,7 +55,7 @@ The dataset consists of 22,720 job postings, flattened from JSON into structured
         - `primary_category`, `primary_position_level`  
 
 !!! note "Relevance to Framework"
-    Preserving multi-label structure enables **accurate skill matching and similarity computation**, avoiding information loss from flattening.
+    Preserving multi-label structure enables accurate skill matching and similarity computation, avoiding information loss from flattening.
 
 ---
 
@@ -74,10 +74,10 @@ EDA identifies structural properties that directly inform modelling choices and 
 *Figure 1: Module representation is uneven, with FASS, CDE, and Science dominating the corpus.*
 
 !!! tip "Implications for Framework"
-    - Risk of **representation bias** in similarity-based matching  
+    - Risk of representation bias in similarity-based matching  
     - Mitigation:
-        - Construct **degree-specific module baskets** (≈15 core + 8 common modules)  
-        - Use **length-normalised embeddings** to ensure fair comparison  
+        - Construct degree-specific module baskets (≈15 core + 8 common modules)  
+        - Use length-normalised embeddings to ensure fair comparison  
 
 ---
 
@@ -102,7 +102,7 @@ EDA identifies structural properties that directly inform modelling choices and 
 *Figure 3: Soft skills (e.g., teamwork, communication) dominate in frequency across job postings.*
 
 !!! tip "Implications for Framework"
-    These skills are **non-discriminative** and introduce noise in similarity matching.  
+    These skills are non-discriminative and introduce noise in similarity matching.  
     They are removed during preprocessing to improve signal quality.
 
 ---
@@ -125,8 +125,8 @@ EDA identifies structural properties that directly inform modelling choices and 
 *Figure 5: Entry and junior roles dominate postings, but there still exist senior positions.*
 
 !!! tip "Implications for Framework"
-    - Aligns with **fresh graduate outcomes**  
-    - Senior roles and internships are excluded to maintain relevance  
+    - Aligns with fresh graduate outcomes
+    - Senior roles are excluded to maintain relevance  
 
 ---
 
