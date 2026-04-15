@@ -102,6 +102,8 @@ If you are editing the technical report, start from:
 
 This repository also includes a browser-based chat interface that wraps the Python retrieval workflow.
 
+https://www.loom.com/share/02a35e4ad0c84dbbbc89aa46be5199af
+
 ### Architecture
 
 - **Python retrieval backend** in `retrieval/`
