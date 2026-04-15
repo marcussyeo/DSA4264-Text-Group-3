@@ -15,11 +15,15 @@ The documentation site is written in Markdown and rendered with MkDocs Material 
 
 To rebuild the documentation locally, install `requirements-docs.txt` and run `mkdocs serve`. To refresh the demo artifacts, run `.venv/bin/python scripts/build_chat_index.py`, then start the API with `.venv/bin/python scripts/run_retrieval_server.py` and the frontend with `npm run dev`.
 
+---
+
 ## Notes On Interpretation
 
 - The notebook analysis profiles 15 curated degree proxies, while the app is a lighter exploratory interface.
 - Degree-to-job scores aggregate evidence from top-matching modules rather than from a single module.
 - Offline results split by metric: hybrid leads balanced pairwise agreement, while cluster-routed semantic leads `NDCG@5` and several top-k precision metrics. The app still prioritises the hybrid score for degree lookups because it is easier to explain.
+
+---
 
 ## Data Cleaning Pipelines
 
@@ -68,8 +72,6 @@ To rebuild the documentation locally, install `requirements-docs.txt` and run `m
 **Output**
 - `degree_modules`: cleaned module-level dataset used in profile construction
 - `degree_profiles`: one aggregated text profile per degree
-
----
 
 ### MyCareersFuture Job Ads Cleaning Pipeline
 
@@ -143,7 +145,9 @@ To rebuild the documentation locally, install `requirements-docs.txt` and run `m
 - `jobs_scope_audit`: audit table covering scope and duplicate decisions
 - `jobs_excluded`, `jobs_exact_removed`, `jobs_semantic_removed`: exclusion and deduplication audit subsets
 
-## Gold Dataset Structure
+---
+
+## Gold Dataset Construction 
 
 The evaluation dataset is stored as `gold_degree_job_alignment.csv`.
 
@@ -188,5 +192,87 @@ Before evaluation, the gold dataset is standardised to ensure compatibility with
 **Step 5: Create query identifiers**
 - If absent, `query_id` is set to `degree_id`.
 
+---
 
+## Degree Profile Construction
+
+The final degree profiles are stored in a structured format (`degree_to_module_map.csv`), where:
+
+- Each row corresponds to a module  
+- Each module is associated with a specific degree  
+
+### Role in Overall Framework
+
+By explicitly designing degree profiles rather than relying on raw module groupings, we ensure that the analysis aligns more closely with how employers interpret educational qualifications.
+
+To bridge this mismatch in granularity, we construct **degree profiles** as an intermediate representation. These profiles aggregate module-level information into a unified textual representation that approximates the knowledge and skills acquired within a degree programme.
+
+### Design Rationale
+
+The construction of degree profiles is guided by two key principles:
+
+1. **Representativeness**  
+   Each degree should capture the core competencies expected of graduates in that discipline.
+
+2. **Comparability**  
+   Degree profiles should be structured in a consistent manner to allow fair comparison across disciplines.
+
+### Selection of Degrees
+
+The 15 degrees are chosen to represent the major undergraduate programmes in NUS across technical and non-technical domains, capturing the spectrum of skills reflected in the EDA.<br>
+- **Faculty of Science**: Data Science and Analytics (dsa), Data Science and Economics (dse) and Pharmacy (pharm)<br>
+- **Faculty of Arts and Social Science**: Communications and New Media (cnm), History (hist), Psychology (psych) and Southeast Asian Studies (sea)<br>
+- **NUS Business School**: Business Administration (biz) and Accountancy (acc)<br>
+- **NUS Computing**: Computer Science (cs) and Business Analytics (bza)<br>
+- **College of Desgin and Engineering**: Civil Engineering (ce), Chemical Engineering (chem_eng), Electrical Engineering (ee) and Architecture (archi)<br> 
+
+### Module Selection Strategy
+
+For each degree, a curated set of modules was selected to form the degree profile. The selection process is based on:
+
+- **Core programme requirements**, which define the degree-specific required courses  
+- **University-level requirements**, which capture necessary vourses all NUS grads have to take for a holistic learning (differs from faculty to faculty as each may have their own iteration of the course)  
+
+These modules contribute to transferable skills such as:
+- Communication  
+- Critical thinking  
+- Interdisciplinary understanding  
+
+### Handling of Module Count
+
+Degree programmes vary in the number of modules required. However, embeddings used in this study are length-normalised, meaning that differences in text length do not disproportionately influence similarity scores.
+
+As such, strict uniformity in module count is not required. Nevertheless, care was taken to ensure that each degree profile contains a comparable number of modules to maintain consistency in representation.
+
+### Exclusion of Internship Modules
+
+Internship modules were excluded from the degree profiles.
+
+These modules were removed for the following reasons:
+
+- They often lack standardised textual descriptions  
+- Skills develop varies significantly across students  
+- They introduce noise into the embedding process  
+
+Excluding these modules improves the consistency and reliability of the degree representations.
+
+### Assumptions
+
+The construction of degree profiles relies on several assumptions:
+
+- Module descriptions accurately reflect the skills and knowledge taught  
+- Aggregated module descriptions approximate the overall learning outcomes of a degree  
+- Selected modules are representative of the typical student experience  
+
+These assumptions are necessary to operationalise degree-level analysis but may not fully capture individual variation in student pathways.
+
+### Limitations
+
+Despite its structured design, this approach has several limitations:
+
+- **Subjectivity in module selection**: The curation process may introduce bias  
+- **Lack of specialisation tracks**: Degree profiles do not capture individual student choices  
+- **Implicit skill representation**: Some skills may not be explicitly mentioned in module descriptions  
+
+These limitations suggest that results should be interpreted as approximations rather than precise measurements.
 
