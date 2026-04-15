@@ -83,6 +83,19 @@ def _first_existing(paths: list[Path | None]) -> Path | None:
     return None
 
 
+def _validate_embedding_rows(
+    *,
+    name: str,
+    embeddings: np.ndarray,
+    expected_rows: int,
+) -> None:
+    if embeddings.shape[0] != expected_rows:
+        raise ValueError(
+            f"{name} row count ({embeddings.shape[0]}) does not match the metadata row count ({expected_rows}). "
+            "Rebuild retrieval artifacts with scripts/build_chat_index.py --force."
+        )
+
+
 def _summarize_labels(labels: list[str], prefix: str) -> str:
     cleaned = [label for label in labels if label]
     if not cleaned:
@@ -315,6 +328,16 @@ class SearchService:
 
         degree_embeddings = np.load(self.paths.degree_embeddings).astype(np.float32)
         job_embeddings = np.load(self.paths.job_embeddings).astype(np.float32)
+        _validate_embedding_rows(
+            name="Degree embeddings",
+            embeddings=degree_embeddings,
+            expected_rows=len(degree_profiles),
+        )
+        _validate_embedding_rows(
+            name="Job embeddings",
+            embeddings=job_embeddings,
+            expected_rows=len(jobs),
+        )
 
         hybrid_scores = None
         if self.paths.hybrid_scores is not None and self.paths.hybrid_scores.exists():

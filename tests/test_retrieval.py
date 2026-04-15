@@ -132,6 +132,19 @@ class RetrievalSearchTests(unittest.TestCase):
         self.assertEqual(response.modules[0].moduleCode, "CS1010")
         self.assertEqual(response.degrees[0].degreeLabel, "Computer Science")
 
+    def test_loader_rejects_mismatched_degree_embeddings(self) -> None:
+        cache_dir = Path(self.temp_dir.name)
+        np.save(
+            cache_dir / "degree_embeddings_all-MiniLM-L6-v2.npy",
+            np.array([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32),
+        )
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "Degree embeddings row count \\(2\\) does not match the metadata row count \\(1\\)",
+        ):
+            SearchService(cache_dir=cache_dir)
+
 
 if __name__ == "__main__":
     unittest.main()
