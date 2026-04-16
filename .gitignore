@@ -6,6 +6,7 @@ venv/
 node_modules/
 .next/
 dist/
+site/
 __pycache__/
 *.pyc
 tsconfig.tsbuildinfo
