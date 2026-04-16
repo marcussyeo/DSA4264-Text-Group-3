@@ -47,8 +47,8 @@ EDA identifies structural properties that inform modelling choices and potential
 
 _Figure 1: Module representation is uneven, with FASS, CDE, and Science dominating the corpus._
 
-!!! tip "Implications for Framework" - Risk of representation bias in similarity matching
-
+Implications for Framework:<br>
+- Risk of representation bias in similarity matching
 - Mitigation: - Construct degree-specific module baskets (≈15 core + 8 common modules)
 - Use length-normalised embeddings for fair comparison
 
@@ -60,9 +60,9 @@ _Figure 1: Module representation is uneven, with FASS, CDE, and Science dominati
 
 _Figure 2: Most descriptions fall within 60–100 words, with few long outliers (>250 words)._
 
-!!! tip "Implications for Framework"
-Descriptions provide sufficient semantic signal for embeddings.  
- Text length is bounded during profile construction to control computational cost.
+Implications for Framework:<br>
+- Descriptions provide sufficient semantic signal for embeddings.  
+- Text length is bounded during profile construction to control computational cost.
 
 ---
 
@@ -74,9 +74,9 @@ Descriptions provide sufficient semantic signal for embeddings.
 
 _Figure 3: Soft skills (e.g., teamwork, communication) dominate job postings._
 
-!!! tip "Implications for Framework"
-These skills are non-discriminative and introduce noise.  
- They are removed during preprocessing.
+Implications for Framework:<br>
+- These skills are non-discriminative and introduce noise.  
+- They are removed during preprocessing.
 
 ---
 
@@ -86,8 +86,8 @@ These skills are non-discriminative and introduce noise.
 
 _Figure 4: Job categories frequently co-occur, reflecting overlapping roles._
 
-!!! tip "Implications for Framework"
-Categories are retained as structured features to enrich representations.
+Implications for Framework:<br>
+- Categories are retained as structured features to enrich representations.
 
 ---
 
@@ -97,8 +97,8 @@ Categories are retained as structured features to enrich representations.
 
 _Figure 5: Entry-level roles dominate, though senior roles exist._
 
-!!! tip "Implications for Framework" - Aligns with graduate outcomes
-
+Implications for Framework:<br>
+- Aligns with graduate outcomes
 - Senior roles are excluded to maintain relevance
 
 ---
