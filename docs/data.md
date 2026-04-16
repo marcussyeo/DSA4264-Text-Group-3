@@ -48,8 +48,9 @@ EDA identifies structural properties that inform modelling choices and potential
 _Figure 1: Module representation is uneven, with FASS, CDE, and Science dominating the corpus._
 
 Implications for Framework:<br>
-- Risk of representation bias in similarity matching
-- Mitigation: - Construct degree-specific module baskets (≈15 core + 8 common modules)
+- Risk of representation bias in similarity matching <br>
+Mitigation: <br>
+- Construct degree-specific module baskets (≈15 core + 8 common modules)
 - Use length-normalised embeddings for fair comparison
 
 ---
